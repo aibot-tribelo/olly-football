@@ -1,0 +1,25 @@
+sessions:
+  - date: "2026-02-07"
+    match: "Bath City vs Cirencester"
+    distance_m: 6334
+    max_speed_kph: 27.1
+    sprints: 8
+    high_intensity: 31
+  - date: "2026-01-10"
+    match: "Bath City vs Wimbourne"
+    distance_m: 8379
+    max_speed_kph: 26.0
+    sprints: 15
+    high_intensity: 41
+  - date: "2025-12-10"
+    match: "Bath City vs Middlezoy"
+    distance_m: 2673
+    max_speed_kph: 24.5
+    sprints: 3
+    high_intensity: 9
+  - date: "2025-12-06"
+    match: "Bath City vs Taunton Town"
+    distance_m: 8859
+    max_speed_kph: 27.8
+    sprints: 9
+    high_intensity: 36

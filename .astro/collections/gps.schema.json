@@ -1,0 +1,53 @@
+{
+  "$ref": "#/definitions/gps",
+  "definitions": {
+    "gps": {
+      "type": "object",
+      "properties": {
+        "sessions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "date": {
+                "type": "string"
+              },
+              "match": {
+                "type": "string"
+              },
+              "distance_m": {
+                "type": "number"
+              },
+              "max_speed_kph": {
+                "type": "number"
+              },
+              "sprints": {
+                "type": "number"
+              },
+              "high_intensity": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "date",
+              "match",
+              "distance_m",
+              "max_speed_kph",
+              "sprints",
+              "high_intensity"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sessions"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

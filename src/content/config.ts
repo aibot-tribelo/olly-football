@@ -80,10 +80,27 @@ const attributesCollection = defineCollection({
   }),
 });
 
+const gpsCollection = defineCollection({
+  type: 'data',
+  schema: z.object({
+    sessions: z.array(
+      z.object({
+        date: z.string(),
+        match: z.string(),
+        distance_m: z.number(),
+        max_speed_kph: z.number(),
+        sprints: z.number(),
+        high_intensity: z.number(),
+      })
+    ),
+  }),
+});
+
 export const collections = {
   profile: profileCollection,
   seasons: seasonsCollection,
   matches: matchesCollection,
   honours: honoursCollection,
   attributes: attributesCollection,
+  gps: gpsCollection,
 };

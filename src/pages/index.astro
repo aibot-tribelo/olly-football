@@ -22,6 +22,16 @@ const honours = honoursEntry.data.honours;
 const attributesEntry = await getEntry('attributes', 'attributes');
 const attributes = attributesEntry.data.attributes;
 
+const gpsEntry = await getEntry('gps', 'gps');
+const gpsSessions = gpsEntry.data.sessions.filter(s => s.distance_m > 0);
+const gpsStats = {
+  matches: gpsSessions.length,
+  avgDistance: Math.round(gpsSessions.reduce((sum, s) => sum + s.distance_m, 0) / gpsSessions.length),
+  topSpeed: Math.max(...gpsSessions.map(s => s.max_speed_kph)),
+  avgSprints: Math.round(gpsSessions.reduce((sum, s) => sum + s.sprints, 0) / gpsSessions.length),
+  avgHighIntensity: Math.round(gpsSessions.reduce((sum, s) => sum + s.high_intensity, 0) / gpsSessions.length),
+};
+
 // Dynamic age (from profile.dob)
 const [dobYear, dobMonth] = profileData.dob.split('-').map(Number);
 const now = new Date();
@@ -213,11 +223,69 @@ const seasonsWithXG = seasons.map(season => ({
     </div>
   </section>
 
+  <!-- GPS PERFORMANCE -->
+  <section class="relative border-t border-pitch-line bg-surface/50">
+    <div class="max-w-7xl mx-auto px-6 sm:px-10 py-20">
+      <div class="flex items-center gap-4 mb-4">
+        <span class="font-['Oswald'] text-gold text-xs tracking-[0.3em] uppercase">02</span>
+        <h2 class="font-['Oswald'] text-3xl sm:text-4xl font-bold uppercase tracking-wide">GPS Performance</h2>
+        <div class="flex-1 h-px bg-pitch-line"></div>
+      </div>
+      <p class="text-xs text-cream-muted mb-10">Tracked via PlayerData GPS · {gpsStats.matches} matches · Bath City U18 2025-26</p>
+
+      <!-- Summary stats -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+        <div class="bg-surface-elevated/60 border border-pitch-line rounded-sm p-5 text-center">
+          <div class="font-['Oswald'] text-3xl font-bold text-gold">{gpsStats.topSpeed.toFixed(1)}</div>
+          <div class="text-xs text-cream-muted uppercase tracking-widest mt-1">Top Speed (km/h)</div>
+        </div>
+        <div class="bg-surface-elevated/60 border border-pitch-line rounded-sm p-5 text-center">
+          <div class="font-['Oswald'] text-3xl font-bold text-cream">{(gpsStats.avgDistance / 1000).toFixed(1)}</div>
+          <div class="text-xs text-cream-muted uppercase tracking-widest mt-1">Avg Distance (km)</div>
+        </div>
+        <div class="bg-surface-elevated/60 border border-pitch-line rounded-sm p-5 text-center">
+          <div class="font-['Oswald'] text-3xl font-bold text-cream">{gpsStats.avgSprints}</div>
+          <div class="text-xs text-cream-muted uppercase tracking-widest mt-1">Avg Sprints</div>
+        </div>
+        <div class="bg-surface-elevated/60 border border-pitch-line rounded-sm p-5 text-center">
+          <div class="font-['Oswald'] text-3xl font-bold text-fire">{gpsStats.avgHighIntensity}</div>
+          <div class="text-xs text-cream-muted uppercase tracking-widest mt-1">Avg High Intensity</div>
+        </div>
+      </div>
+
+      <!-- Per-match breakdown -->
+      <div class="grid gap-4">
+        {gpsSessions.map(s => (
+          <div class="bg-surface-elevated/40 border border-pitch-line rounded-sm p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-gold/20 transition-colors">
+            <div>
+              <div class="font-['Oswald'] text-sm uppercase tracking-wide text-cream">{s.match}</div>
+              <div class="text-xs text-cream-muted">{new Date(s.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
+            </div>
+            <div class="flex items-center gap-6 sm:gap-8">
+              <div class="text-center">
+                <div class="font-['Oswald'] text-xl font-bold text-cream">{(s.distance_m / 1000).toFixed(1)}<span class="text-sm text-cream-muted">km</span></div>
+              </div>
+              <div class="text-center">
+                <div class="font-['Oswald'] text-xl font-bold text-gold">{s.max_speed_kph.toFixed(1)}<span class="text-sm text-cream-muted">km/h</span></div>
+              </div>
+              <div class="text-center">
+                <div class="font-['Oswald'] text-xl font-bold text-cream">{s.sprints}<span class="text-sm text-cream-muted"> spr</span></div>
+              </div>
+              <div class="text-center">
+                <div class="font-['Oswald'] text-xl font-bold text-fire">{s.high_intensity}<span class="text-sm text-cream-muted"> HI</span></div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
   <!-- SEASON BY SEASON -->
   <section id="seasons" class="relative border-t border-pitch-line">
     <div class="max-w-7xl mx-auto px-6 sm:px-10 py-20">
       <div class="flex items-center gap-4 mb-12">
-        <span class="font-['Oswald'] text-gold text-xs tracking-[0.3em] uppercase">02</span>
+        <span class="font-['Oswald'] text-gold text-xs tracking-[0.3em] uppercase">03</span>
         <h2 class="font-['Oswald'] text-3xl sm:text-4xl font-bold uppercase tracking-wide">Season by Season</h2>
         <div class="flex-1 h-px bg-pitch-line"></div>
       </div>
@@ -289,7 +357,7 @@ const seasonsWithXG = seasons.map(season => ({
   <section class="relative border-t border-pitch-line bg-surface/50">
     <div class="max-w-7xl mx-auto px-6 sm:px-10 py-20">
       <div class="flex items-center gap-4 mb-12">
-        <span class="font-['Oswald'] text-gold text-xs tracking-[0.3em] uppercase">03</span>
+        <span class="font-['Oswald'] text-gold text-xs tracking-[0.3em] uppercase">04</span>
         <h2 class="font-['Oswald'] text-3xl sm:text-4xl font-bold uppercase tracking-wide">Standout Performances</h2>
         <div class="flex-1 h-px bg-pitch-line"></div>
       </div>
@@ -314,7 +382,7 @@ const seasonsWithXG = seasons.map(season => ({
   <section id="honours" class="relative border-t border-pitch-line">
     <div class="max-w-7xl mx-auto px-6 sm:px-10 py-20">
       <div class="flex items-center gap-4 mb-12">
-        <span class="font-['Oswald'] text-gold text-xs tracking-[0.3em] uppercase">04</span>
+        <span class="font-['Oswald'] text-gold text-xs tracking-[0.3em] uppercase">05</span>
         <h2 class="font-['Oswald'] text-3xl sm:text-4xl font-bold uppercase tracking-wide">Honours & Recognition</h2>
         <div class="flex-1 h-px bg-pitch-line"></div>
       </div>
@@ -338,7 +406,7 @@ const seasonsWithXG = seasons.map(season => ({
   <section class="relative border-t border-pitch-line bg-surface/50">
     <div class="max-w-7xl mx-auto px-6 sm:px-10 py-20">
       <div class="flex items-center gap-4 mb-12">
-        <span class="font-['Oswald'] text-gold text-xs tracking-[0.3em] uppercase">05</span>
+        <span class="font-['Oswald'] text-gold text-xs tracking-[0.3em] uppercase">06</span>
         <h2 class="font-['Oswald'] text-3xl sm:text-4xl font-bold uppercase tracking-wide">Player Info</h2>
         <div class="flex-1 h-px bg-pitch-line"></div>
       </div>
@@ -377,7 +445,7 @@ const seasonsWithXG = seasons.map(season => ({
   <section id="gallery" class="relative border-t border-pitch-line">
     <div class="max-w-7xl mx-auto px-6 sm:px-10 py-20">
       <div class="flex items-center gap-4 mb-12">
-        <span class="font-['Oswald'] text-gold text-xs tracking-[0.3em] uppercase">06</span>
+        <span class="font-['Oswald'] text-gold text-xs tracking-[0.3em] uppercase">07</span>
         <h2 class="font-['Oswald'] text-3xl sm:text-4xl font-bold uppercase tracking-wide">Gallery</h2>
         <div class="flex-1 h-px bg-pitch-line"></div>
       </div>
