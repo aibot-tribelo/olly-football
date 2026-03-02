@@ -78,13 +78,7 @@ export async function getStaticPaths() {
     <meta name="twitter:site" content="@ollyrobinson21" />
   </Fragment>
 
-  <Nav current="gps">
-    <Fragment slot="center">
-      {prevDate && <a href={`${BASE}gps/${prevDate}/`} class="text-xs text-cream-muted hover:text-gold transition-colors mr-2" aria-label="Previous match session">← Prev</a>}
-      <span class="text-xs text-cream-muted/60 mr-2">{s.date}</span>
-      {nextDate && <a href={`${BASE}gps/${nextDate}/`} class="text-xs text-cream-muted hover:text-gold transition-colors mr-4" aria-label="Next match session">Next →</a>}
-    </Fragment>
-  </Nav>
+  <Nav current="gps" />
 
   <main id="main" class="min-h-screen pitch-pattern pt-24 pb-20">
     <div class="max-w-4xl mx-auto px-6 sm:px-10">
