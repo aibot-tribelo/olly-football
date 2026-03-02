@@ -1,19 +1,19 @@
 attributes:
   - name: "Finishing"
-    rating: 10
-    note: "95G in 96 apps; both feet, clinical at all ranges"
-  - name: "Pace & Athleticism"
     rating: 9
-    note: "27.8 km/h top speed; 34 accelerations per match"
+    note: "95G in 96 apps; clinical at regional & county level, developing at U18"
   - name: "Chance Creation"
     rating: 9
-    note: "65 assists in 96 apps — elite vision for a striker"
-  - name: "Dribbling / 1v1"
-    rating: 9
-    note: "Direct, powerful; difficult to dispossess at pace"
+    note: "65 assists in 96 apps; 0.43/game at competitive levels — exceptional for a striker"
   - name: "Clutch Moments"
     rating: 9
-    note: "Hat-tricks in finals; England Schools semi-final"
+    note: "Hat-tricks in cup finals; big-game performer across all levels"
+  - name: "Dribbling / 1v1"
+    rating: 8
+    note: "Direct, powerful; strong at lower levels, developing at U18"
+  - name: "Pace & Athleticism"
+    rating: 8
+    note: "27.8 km/h top speed; above average for age, below elite academy threshold"
   - name: "Aerial Ability"
-    rating: 7
-    note: "Competitive; developing with physical growth"
+    rating: 6
+    note: "Competitive but not a primary weapon; developing with physical growth"
