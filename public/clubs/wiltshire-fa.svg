@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
-  <circle cx="100" cy="100" r="95" fill="#1a472a" stroke="#fbbf24" stroke-width="4"/>
-  <text x="100" y="80" text-anchor="middle" font-family="sans-serif" font-size="28" font-weight="bold" fill="white">WILTS</text>
-  <text x="100" y="115" text-anchor="middle" font-family="sans-serif" font-size="22" font-weight="bold" fill="#fbbf24">FA</text>
-  <text x="100" y="145" text-anchor="middle" font-family="sans-serif" font-size="12" fill="white" opacity="0.8">COUNTY</text>
-</svg>
