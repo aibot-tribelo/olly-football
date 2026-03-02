@@ -29,10 +29,10 @@ const typeColors: Record<string, string> = {
   </nav>
 
   <main id="main" class="min-h-screen pitch-pattern pt-24 pb-20">
-    <div class="max-w-7xl mx-auto px-6 sm:px-10">
+    <div class="max-w-4xl mx-auto px-6 sm:px-10">
 
       <!-- Header -->
-      <div class="mb-16">
+      <div class="mb-12">
         <div class="flex items-center gap-3 mb-6">
           <div class="h-px w-12 bg-gold"></div>
           <span class="font-['Oswald'] text-xs uppercase tracking-[0.3em] text-gold">Match Footage & Highlights</span>
@@ -45,28 +45,30 @@ const typeColors: Record<string, string> = {
         </p>
       </div>
 
-      <!-- Video Grid -->
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Video List — single column, full width -->
+      <div class="space-y-10">
         {videos.map(v => (
-          <div class="group bg-surface-elevated/60 border border-pitch-line rounded-sm overflow-hidden hover:border-gold/30 transition-all">
-            <!-- YouTube embed -->
-            <div class="aspect-video">
-              <iframe
-                src={`https://www.youtube-nocookie.com/embed/${v.id}${v.start ? `?start=${v.start}&end=${v.end}` : ''}`}
-                title={v.title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
+          <div class="group">
+            <!-- Thumbnail with play button — click to load iframe -->
+            <div class="relative aspect-video rounded-sm overflow-hidden bg-pitch-light cursor-pointer video-container" data-video-id={v.id}>
+              <img
+                src={`https://img.youtube.com/vi/${v.id}/maxresdefault.jpg`}
+                alt={v.title}
+                class="w-full h-full object-cover"
                 loading="lazy"
-                class="w-full h-full"
-              ></iframe>
-            </div>
-            <div class="p-5">
-              <div class="flex items-center gap-2 mb-2">
-                <span class={`text-xs font-semibold uppercase tracking-wider border px-2 py-0.5 rounded-sm ${typeColors[v.type]}`}>{v.type}</span>
+              />
+              <div class="absolute inset-0 bg-pitch/30 group-hover:bg-pitch/10 transition-colors flex items-center justify-center">
+                <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gold/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-gold/20">
+                  <svg class="w-7 h-7 sm:w-8 sm:h-8 text-pitch ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </div>
               </div>
-              <h3 class="font-['Oswald'] text-base uppercase tracking-wide text-cream group-hover:text-gold transition-colors mb-1">{v.title}</h3>
-              <p class="text-xs text-cream-muted">{v.description}</p>
             </div>
+            <!-- Info -->
+            <div class="flex items-center gap-3 mt-4">
+              <span class={`text-xs font-semibold uppercase tracking-wider border px-2 py-0.5 rounded-sm ${typeColors[v.type]}`}>{v.type}</span>
+              <h3 class="font-['Oswald'] text-lg uppercase tracking-wide text-cream">{v.title}</h3>
+            </div>
+            <p class="text-xs text-cream-muted mt-1">{v.description}</p>
           </div>
         ))}
       </div>
@@ -81,3 +83,22 @@ const typeColors: Record<string, string> = {
   </main>
 
 </Layout>
+
+<script>
+  // Click thumbnail to replace with YouTube iframe
+  document.querySelectorAll('.video-container').forEach(container => {
+    container.addEventListener('click', () => {
+      const id = container.getAttribute('data-video-id');
+      if (!id) return;
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
+      iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+      iframe.setAttribute('allowfullscreen', '');
+      iframe.className = 'w-full h-full absolute inset-0';
+      container.innerHTML = '';
+      container.style.position = 'relative';
+      container.appendChild(iframe);
+      container.classList.remove('cursor-pointer');
+    });
+  });
+</script>
