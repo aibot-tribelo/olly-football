@@ -29,7 +29,7 @@ const typeColors: Record<string, string> = {
   </nav>
 
   <main id="main" class="min-h-screen pitch-pattern pt-24 pb-20">
-    <div class="max-w-7xl mx-auto px-6 sm:px-10">
+    <div class="max-w-4xl mx-auto px-6 sm:px-10">
 
       <!-- Header -->
       <div class="mb-12">
@@ -41,33 +41,35 @@ const typeColors: Record<string, string> = {
           <span class="text-cream">Watch</span> <span class="text-gold">Olly</span>
         </h1>
         <p class="text-cream-muted text-sm max-w-lg">
-          Match highlights, goals and tournament clips. Tap to play.
+          Match highlights, goals and tournament clips.
         </p>
       </div>
 
-      <!-- Video Grid — thumbnails -->
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Video List — single column, full width -->
+      <div class="space-y-10">
         {videos.map(v => (
-          <button class="group text-left video-thumb cursor-pointer" data-video-id={v.id} data-video-title={v.title}>
-            <div class="relative aspect-video rounded-sm overflow-hidden bg-pitch-light">
+          <div class="group">
+            <!-- Thumbnail with play button — click to load iframe -->
+            <div class="relative aspect-video rounded-sm overflow-hidden bg-pitch-light cursor-pointer video-container" data-video-id={v.id}>
               <img
                 src={`https://img.youtube.com/vi/${v.id}/maxresdefault.jpg`}
                 alt={v.title}
-                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                class="w-full h-full object-cover"
                 loading="lazy"
               />
               <div class="absolute inset-0 bg-pitch/30 group-hover:bg-pitch/10 transition-colors flex items-center justify-center">
-                <div class="w-14 h-14 bg-gold/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-gold/20">
-                  <svg class="w-6 h-6 text-pitch ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gold/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-gold/20">
+                  <svg class="w-7 h-7 sm:w-8 sm:h-8 text-pitch ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                 </div>
               </div>
             </div>
-            <div class="flex items-center gap-2 mt-3">
+            <!-- Info -->
+            <div class="flex items-center gap-3 mt-4">
               <span class={`text-xs font-semibold uppercase tracking-wider border px-2 py-0.5 rounded-sm ${typeColors[v.type]}`}>{v.type}</span>
+              <h3 class="font-['Oswald'] text-lg uppercase tracking-wide text-cream">{v.title}</h3>
             </div>
-            <h3 class="font-['Oswald'] text-sm uppercase tracking-wide text-cream group-hover:text-gold transition-colors mt-1.5">{v.title}</h3>
-            <p class="text-xs text-cream-muted mt-0.5">{v.description}</p>
-          </button>
+            <p class="text-xs text-cream-muted mt-1">{v.description}</p>
+          </div>
         ))}
       </div>
 
@@ -83,70 +85,20 @@ const typeColors: Record<string, string> = {
 </Layout>
 
 <script>
-  // Create video modal
-  const modal = document.createElement('div');
-  modal.id = 'video-modal';
-  modal.className = 'fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm hidden items-center justify-center flex-col';
-  modal.setAttribute('role', 'dialog');
-  modal.setAttribute('aria-modal', 'true');
-  modal.setAttribute('aria-label', 'Video player');
-  modal.innerHTML = `
-    <button id="vm-close" aria-label="Close video" class="absolute top-4 right-4 z-10 w-14 h-14 flex items-center justify-center text-white/70 hover:text-white bg-white/10 hover:bg-white/20 rounded-full text-3xl cursor-pointer transition-colors focus:outline-2 focus:outline-gold focus:outline-offset-2">&times;</button>
-    <div id="vm-container" class="w-[95vw] max-w-5xl aspect-video relative">
-      <iframe id="vm-iframe" class="w-full h-full rounded-sm" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    </div>
-    <div id="vm-title" class="text-sm text-white/80 mt-4 font-medium text-center px-4"></div>
-  `;
-  document.body.appendChild(modal);
-
-  const vmIframe = document.getElementById('vm-iframe') as HTMLIFrameElement;
-  const vmTitle = document.getElementById('vm-title') as HTMLElement;
-
-  function openVideo(id: string, title: string) {
-    vmIframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
-    vmTitle.textContent = title;
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeVideo() {
-    vmIframe.src = '';
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-    document.body.style.overflow = '';
-  }
-
-  // Thumbnail click handlers
-  document.querySelectorAll('.video-thumb').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const id = btn.getAttribute('data-video-id');
-      const title = btn.getAttribute('data-video-title');
-      if (id) openVideo(id, title || '');
+  // Click thumbnail to replace with YouTube iframe
+  document.querySelectorAll('.video-container').forEach(container => {
+    container.addEventListener('click', () => {
+      const id = container.getAttribute('data-video-id');
+      if (!id) return;
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
+      iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+      iframe.setAttribute('allowfullscreen', '');
+      iframe.className = 'w-full h-full absolute inset-0';
+      container.innerHTML = '';
+      container.style.position = 'relative';
+      container.appendChild(iframe);
+      container.classList.remove('cursor-pointer');
     });
   });
-
-  document.getElementById('vm-close')?.addEventListener('click', closeVideo);
-
-  // Close on backdrop click
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) closeVideo();
-  });
-
-  // Keyboard
-  document.addEventListener('keydown', (e) => {
-    if (modal.classList.contains('hidden')) return;
-    if (e.key === 'Escape') closeVideo();
-  });
-
-  // Swipe down to close
-  let touchStartY = 0;
-  modal.addEventListener('touchstart', (e: TouchEvent) => {
-    touchStartY = e.changedTouches[0].screenY;
-  }, { passive: true });
-
-  modal.addEventListener('touchend', (e: TouchEvent) => {
-    const dy = touchStartY - e.changedTouches[0].screenY;
-    if (dy < -80) closeVideo();
-  }, { passive: true });
 </script>
