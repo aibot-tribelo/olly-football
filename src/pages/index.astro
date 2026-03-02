@@ -41,12 +41,13 @@ careerStats.gaPerGame = parseFloat(
   ((careerStats.goals + careerStats.assists) / careerStats.apps).toFixed(2)
 );
 
-// Add computed xG p90 to each club
+// Add computed G/90 and A/90 to each club
 const seasonsWithXG = seasons.map(season => ({
   ...season,
   clubs: season.clubs.map(club => ({
     ...club,
     gp90: club.mins > 0 ? parseFloat(((club.goals / club.mins) * 90).toFixed(2)) : 0,
+    ap90: club.mins > 0 ? parseFloat(((club.assists / club.mins) * 90).toFixed(2)) : 0,
   })),
 }));
 ---
@@ -264,7 +265,11 @@ const seasonsWithXG = seasons.map(season => ({
                       )}
                       <div class="text-center">
                         <div class="font-['Oswald'] text-2xl font-bold text-fire">{club.gp90.toFixed(2)}</div>
-                        <div class="text-xs text-cream-muted uppercase tracking-widest">xG p90</div>
+                        <div class="text-xs text-cream-muted uppercase tracking-widest">G/90</div>
+                      </div>
+                      <div class="text-center">
+                        <div class="font-['Oswald'] text-2xl font-bold text-cream">{club.ap90.toFixed(2)}</div>
+                        <div class="text-xs text-cream-muted uppercase tracking-widest">A/90</div>
                       </div>
                     </div>
                   </div>
