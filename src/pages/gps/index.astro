@@ -39,7 +39,16 @@ const stats = {
 };
 ---
 
-<Layout title="GPS Performance — Olly Robinson" description="GPS tracking data for Olly Robinson — distance, speed, sprints and high-intensity performance from PlayerData.">
+<Layout title="GPS Performance — Olly Robinson | Striker" description="GPS tracking data for Olly Robinson — distance, top speed, sprints and high-intensity performance tracked via PlayerData. Bath City U18, 2025-26 season.">
+  <Fragment slot="head">
+    <link rel="canonical" href="https://or9.uk/gps/" />
+    <meta property="og:title" content="GPS Performance — Olly Robinson" />
+    <meta property="og:description" content="GPS tracking data for Olly Robinson — distance, top speed, sprints and high-intensity performance. Bath City U18, 2025-26." />
+    <meta property="og:url" content="https://or9.uk/gps/" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@ollyrobinson21" />
+  </Fragment>
 
   <nav aria-label="GPS navigation" class="fixed top-0 left-0 right-0 z-50 bg-pitch/80 backdrop-blur-md border-b border-pitch-line/50">
     <div class="max-w-7xl mx-auto px-6 sm:px-10 h-14 flex items-center justify-between">
@@ -66,7 +75,8 @@ const stats = {
       </div>
 
       <!-- Headline stats grid -->
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-14">
+      <section aria-label="Season averages" class="mb-14">
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         <div class="bg-surface-elevated/60 border border-gold/20 rounded-sm p-5 text-center">
           <div class="font-['Oswald'] text-3xl font-bold text-gold">{stats.topSpeed}</div>
           <div class="text-xs text-cream-muted uppercase tracking-widest mt-1">Top Speed<br/>km/h</div>
@@ -93,14 +103,15 @@ const stats = {
         </div>
       </div>
 
-      <!-- Session-by-session -->
-      <div class="mb-6">
-        <h2 class="font-['Oswald'] text-2xl font-bold uppercase tracking-wide mb-6">Match Sessions</h2>
-      </div>
+      </section>
 
-      <div class="space-y-4">
+      <!-- Session-by-session -->
+      <section aria-label="Match sessions">
+      <h2 class="font-['Oswald'] text-2xl font-bold uppercase tracking-wide mb-6">Match Sessions</h2>
+
+      <div class="space-y-4" role="list">
         {sessionsWithEst.map(s => (
-          <a href={s.has_data ? `${BASE}gps/${s.session_id}/` : undefined} class={`block border rounded-sm p-5 transition-colors ${s.has_data ? 'bg-surface-elevated/40 border-pitch-line hover:border-gold/20 cursor-pointer' : 'bg-surface-elevated/20 border-pitch-line/50 opacity-50 pointer-events-none'}`}>
+          <a href={s.has_data ? `${BASE}gps/${s.date}/` : undefined} role="listitem" aria-label={s.has_data ? `${s.match} on ${s.date} — view full GPS data` : `${s.match} on ${s.date} — no GPS data`} class={`block border rounded-sm p-5 transition-colors ${s.has_data ? 'bg-surface-elevated/40 border-pitch-line hover:border-gold/20 cursor-pointer' : 'bg-surface-elevated/20 border-pitch-line/50 opacity-50 pointer-events-none'}`}>
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <div class="font-['Oswald'] text-base uppercase tracking-wide text-cream">{s.match}</div>
@@ -153,11 +164,12 @@ const stats = {
           </a>
         ))}
       </div>
+      </section>
 
       <!-- Data source -->
-      <div class="mt-12 text-center text-xs text-cream-muted/60">
-        Data tracked via <a href="https://playerdata.com" target="_blank" rel="noopener" class="text-gold/60 hover:text-gold underline">PlayerData</a> GPS · Updated weekly
-      </div>
+      <footer class="mt-12 text-center text-xs text-cream-muted/60">
+        Data tracked via <a href="https://playerdata.com" target="_blank" rel="noopener noreferrer" class="text-gold/60 hover:text-gold underline">PlayerData</a> GPS · Updated weekly
+      </footer>
 
     </div>
   </main>

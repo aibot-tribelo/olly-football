@@ -267,7 +267,7 @@ const seasonsWithXG = seasons.map(season => ({
       <!-- Per-match breakdown -->
       <div class="grid gap-4">
         {gpsSessionsWithEst.map(s => (
-          <a href={`${BASE}gps/${s.session_id}/`} class="block bg-surface-elevated/40 border border-pitch-line rounded-sm p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-gold/20 transition-colors group">
+          <a href={`${BASE}gps/${s.date}/`} class="block bg-surface-elevated/40 border border-pitch-line rounded-sm p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-gold/20 transition-colors group">
             <div>
               <div class="font-['Oswald'] text-sm uppercase tracking-wide text-cream group-hover:text-gold transition-colors">{s.match}</div>
               <div class="text-xs text-cream-muted">
