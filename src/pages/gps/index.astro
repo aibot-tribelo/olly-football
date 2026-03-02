@@ -113,7 +113,7 @@ const stats = {
 
       <div class="space-y-4" role="list">
         {sessionsWithEst.map(s => (
-          <a href={s.has_data ? `${BASE}gps/${s.date}/` : undefined} role="listitem" aria-label={s.has_data ? `${s.match} on ${s.date} — view full GPS data` : `${s.match} on ${s.date} — no GPS data`} class={`block border rounded-sm p-5 transition-colors ${s.has_data ? 'bg-surface-elevated/40 border-pitch-line hover:border-gold/20 cursor-pointer' : 'bg-surface-elevated/20 border-pitch-line/50 opacity-50 pointer-events-none'}`}>
+          <a href={s.has_data ? `${BASE}gps/${s.date}/` : undefined} role="listitem" aria-label={s.has_data ? `${s.match} on ${s.date} — view full GPS data` : `${s.match} on ${s.date} — no GPS data`} class={`block border rounded-sm p-5 transition-all ${s.has_data ? 'bg-surface-elevated/40 border-pitch-line hover:border-gold/40 hover:bg-surface-elevated/60 cursor-pointer' : 'bg-surface-elevated/20 border-pitch-line/50 opacity-50 pointer-events-none'}`}>
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <div class="font-['Oswald'] text-base uppercase tracking-wide text-cream flex items-center gap-2">
