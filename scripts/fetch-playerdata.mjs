@@ -237,41 +237,67 @@ async function fetchHeatmaps(cookies) {
   const pathData = await pathRes.json();
   if (pathData.errors) { console.log('⚠️ Path query errors:', JSON.stringify(pathData.errors)); return; }
 
+  // Catmull-Rom to cubic bezier smooth paths
+  function smoothPath(points) {
+    if (points.length < 2) return '';
+    if (points.length === 2) return 'M' + points[0][0].toFixed(1) + ',' + points[0][1].toFixed(1) + 'L' + points[1][0].toFixed(1) + ',' + points[1][1].toFixed(1);
+    let d = 'M' + points[0][0].toFixed(1) + ',' + points[0][1].toFixed(1);
+    for (let i = 0; i < points.length - 1; i++) {
+      const p0 = points[Math.max(0, i - 1)];
+      const p1 = points[i];
+      const p2 = points[i + 1];
+      const p3 = points[Math.min(points.length - 1, i + 2)];
+      const cp1x = p1[0] + (p2[0] - p0[0]) / 6;
+      const cp1y = p1[1] + (p2[1] - p0[1]) / 6;
+      const cp2x = p2[0] - (p3[0] - p1[0]) / 6;
+      const cp2y = p2[1] - (p3[1] - p1[1]) / 6;
+      d += 'C' + cp1x.toFixed(1) + ',' + cp1y.toFixed(1) + ' ' + cp2x.toFixed(1) + ',' + cp2y.toFixed(1) + ' ' + p2[0].toFixed(1) + ',' + p2[1].toFixed(1);
+    }
+    return d;
+  }
+
   let pathCount = 0;
   for (const p of pathData.data.currentPerson.matchSessionParticipations) {
     const date = p.matchSession.startTime.slice(0, 10);
     for (const pm of (p.periodMetricSets || [])) {
-      const period = pm.matchSessionPeriod.name.toLowerCase().replace(/\s+/g, '-');
+      const periodName = pm.matchSessionPeriod.name;
+      const period = periodName.toLowerCase().replace(/\s+/g, '-');
+      const isSecondHalf = periodName === 'Second Half';
       const ap = pm.averagePosition;
       const pathmaps = pm.pathmaps || [];
       if (!ap && pathmaps.length === 0) continue;
 
       const filepath = `${dir}/${date}-${period}-paths.svg`;
-      if (existsSync(filepath)) continue; // Skip existing
+      if (existsSync(filepath)) continue;
 
       const maxX = ap?.maxX || pathmaps[0]?.pitchLimits?.maxX || 105;
       const maxY = ap?.maxY || pathmaps[0]?.pitchLimits?.maxY || 68;
+      const flipY = (y) => isSecondHalf ? maxY - y : y;
+      const flipX = (x) => isSecondHalf ? maxX - x : x;
 
       let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${maxX} ${maxY}" preserveAspectRatio="none">\n`;
 
       for (const sp of pathmaps.filter(p => p.pathType === 'sprint')) {
         for (const path of (sp.paths || [])) {
           if (path.length < 2) continue;
-          const d = 'M' + path.map(pt => pt[0].toFixed(1) + ',' + pt[1].toFixed(1)).join('L');
-          svg += `  <path d="${d}" fill="none" stroke="#ef4444" stroke-width="0.8" stroke-linecap="round" opacity="0.9"/>\n`;
+          const pts = path.map(pt => [flipX(pt[0]), flipY(pt[1])]);
+          svg += `  <path d="${smoothPath(pts)}" fill="none" stroke="#ef4444" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>\n`;
         }
       }
 
       for (const hp of pathmaps.filter(p => p.pathType === 'high_intensity')) {
         for (const path of (hp.paths || [])) {
           if (path.length < 2) continue;
-          const d = 'M' + path.map(pt => pt[0].toFixed(1) + ',' + pt[1].toFixed(1)).join('L');
-          svg += `  <path d="${d}" fill="none" stroke="#fbbf24" stroke-width="0.6" stroke-linecap="round" opacity="0.7"/>\n`;
+          const pts = path.map(pt => [flipX(pt[0]), flipY(pt[1])]);
+          svg += `  <path d="${smoothPath(pts)}" fill="none" stroke="#fbbf24" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>\n`;
         }
       }
 
       if (ap) {
-        svg += `  <circle cx="${ap.xPosition.toFixed(1)}" cy="${ap.yPosition.toFixed(1)}" r="2" fill="#ffffff" stroke="#ef4444" stroke-width="0.5" opacity="0.9"/>\n`;
+        const cx = flipX(ap.xPosition).toFixed(1);
+        const cy = flipY(ap.yPosition).toFixed(1);
+        svg += `  <circle cx="${cx}" cy="${cy}" r="3.5" fill="#0c0c0c" stroke="#ef4444" stroke-width="0.4" opacity="0.95"/>\n`;
+        svg += `  <text x="${cx}" y="${(parseFloat(cy) + 1.2).toFixed(1)}" text-anchor="middle" font-family="sans-serif" font-size="3.5" font-weight="700" fill="#ffffff" opacity="0.95">OR</text>\n`;
       }
 
       svg += '</svg>';
