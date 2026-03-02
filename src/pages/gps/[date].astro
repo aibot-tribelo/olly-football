@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Nav from '../../components/Nav.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
 import { getEntry } from 'astro:content';
 import { existsSync } from 'fs';
 
@@ -86,7 +87,12 @@ export async function getStaticPaths() {
 
   <Nav current="gps" />
 
-  <main id="main" class="min-h-screen pitch-pattern pt-24 pb-20">
+  <main id="main" class="min-h-screen pitch-pattern pt-20 pb-20">
+    <Breadcrumb crumbs={[
+      { label: 'Profile', href: '/' },
+      { label: 'GPS Performance', href: '/gps/' },
+      { label: `${s.match} · ${new Date(s.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}` }
+    ]} />
     <div class="max-w-4xl mx-auto px-6 sm:px-10">
 
       <!-- Header -->
