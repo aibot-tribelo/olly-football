@@ -299,7 +299,9 @@ async function fetchHeatmaps(cookies) {
         const cx = flipX(ap.xPosition).toFixed(1);
         const cy = flipY(ap.yPosition).toFixed(1);
         const rx = 3.5;
-        const ry = (3.5 * (maxX / maxY)).toFixed(1);
+        // Compensate for pitch image aspect ratio (1056x1600) vs viewBox
+        const stretchRatio = (1600 / maxY) / (1056 / maxX);
+        const ry = (rx / stretchRatio).toFixed(1);
         svg += `  <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="#0c0c0c" stroke="#ef4444" stroke-width="0.4" opacity="0.95"/>\n`;
         svg += `  <text x="${cx}" y="${(parseFloat(cy) + parseFloat(ry) * 0.35).toFixed(1)}" text-anchor="middle" font-family="sans-serif" font-size="${(parseFloat(ry) * 0.95).toFixed(1)}" font-weight="700" fill="#ffffff" opacity="0.95">OR</text>\n`;
       }
