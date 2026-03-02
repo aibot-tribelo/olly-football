@@ -1,0 +1,19 @@
+season: "2023–24"
+clubs:
+  - name: "AFC Corsham U15"
+    league: "Mid Wilts League"
+    apps: 23
+    goals: 47
+    assists: 26
+    mins: 1735
+    color: "#e76f51"
+  - name: "FC Wilts JPL U15"
+    league: "Junior Premier League"
+    apps: 12
+    goals: 10
+    assists: 7
+    mins: 720
+    color: "#264653"
+highlights:
+  - "League 1 & Cup Double"
+  - "AC Milan Training Camp (Italy)"

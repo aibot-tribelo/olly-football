@@ -1,0 +1,68 @@
+{
+  "$ref": "#/definitions/seasons",
+  "definitions": {
+    "seasons": {
+      "type": "object",
+      "properties": {
+        "season": {
+          "type": "string"
+        },
+        "clubs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "league": {
+                "type": "string"
+              },
+              "apps": {
+                "type": "number"
+              },
+              "goals": {
+                "type": "number"
+              },
+              "assists": {
+                "type": "number"
+              },
+              "mins": {
+                "type": "number"
+              },
+              "color": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "league",
+              "apps",
+              "goals",
+              "assists",
+              "mins",
+              "color"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "highlights": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "season",
+        "clubs",
+        "highlights"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

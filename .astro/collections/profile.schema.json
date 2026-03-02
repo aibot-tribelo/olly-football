@@ -1,0 +1,73 @@
+{
+  "$ref": "#/definitions/profile",
+  "definitions": {
+    "profile": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "dob": {
+          "type": "string"
+        },
+        "height": {
+          "type": "string"
+        },
+        "weight": {
+          "type": "string"
+        },
+        "foot": {
+          "type": "string"
+        },
+        "position": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "nationality": {
+          "type": "string"
+        },
+        "current_clubs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "socials": {
+          "type": "object",
+          "properties": {
+            "instagram": {
+              "type": "string"
+            },
+            "x": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "instagram",
+            "x"
+          ],
+          "additionalProperties": false
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "dob",
+        "height",
+        "weight",
+        "foot",
+        "position",
+        "location",
+        "nationality",
+        "current_clubs",
+        "socials"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

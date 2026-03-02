@@ -1,0 +1,26 @@
+season: "2025–26"
+clubs:
+  - name: "Bath City U18"
+    league: "SW Counties Youth League U18"
+    apps: 13
+    goals: 6
+    assists: 2
+    mins: 880
+    color: "#e63946"
+  - name: "Melksham Town Reserves"
+    league: "Wiltshire Senior League Premier (Step 7)"
+    apps: 2
+    goals: 0
+    assists: 1
+    mins: 45
+    color: "#457b9d"
+  - name: "Melksham Town U18"
+    league: "Wilts Senior U18 Floodlight League"
+    apps: 6
+    goals: 3
+    assists: 3
+    mins: 225
+    color: "#457b9d"
+highlights:
+  - "Senior debut at 16"
+  - "Academy step-up to U18"
