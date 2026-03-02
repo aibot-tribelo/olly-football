@@ -1,112 +1,74 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { getEntry, getCollection } from 'astro:content';
 
 const BASE = import.meta.env.BASE_URL;
 
-// Dynamic age (DOB: July 2009)
+// Load content collections
+const profile = await getEntry('profile', 'profile');
+const profileData = profile.data;
+
+const seasonsEntries = await getCollection('seasons');
+const seasons = seasonsEntries
+  .map(entry => entry.data)
+  .sort((a, b) => b.season.localeCompare(a.season)); // Newest first
+
+const matchesEntry = await getEntry('matches', 'matches');
+const keyMatches = matchesEntry.data.matches;
+
+const honoursEntry = await getEntry('honours', 'honours');
+const honours = honoursEntry.data.honours;
+
+const attributesEntry = await getEntry('attributes', 'attributes');
+const attributes = attributesEntry.data.attributes;
+
+// Dynamic age (from profile.dob)
+const [dobYear, dobMonth] = profileData.dob.split('-').map(Number);
 const now = new Date();
-let age = now.getFullYear() - 2009;
-if (now.getMonth() < 6) age--; // Before July
+let age = now.getFullYear() - dobYear;
+if (now.getMonth() + 1 < dobMonth) age--; // Before birth month
 
-// Career stats
+// Compute career stats dynamically
+const allClubs = seasons.flatMap(s => s.clubs);
 const careerStats = {
-  apps: 114,
-  goals: 164,
-  assists: 92,
-  gaPerGame: 2.25,
-  clubs: 7,
+  apps: allClubs.reduce((sum, c) => sum + c.apps, 0),
+  goals: allClubs.reduce((sum, c) => sum + c.goals, 0),
+  assists: allClubs.reduce((sum, c) => sum + c.assists, 0),
+  gaPerGame: 0, // will compute below
+  clubs: new Set(allClubs.map(c => c.name)).size,
 };
+careerStats.gaPerGame = parseFloat(
+  ((careerStats.goals + careerStats.assists) / careerStats.apps).toFixed(2)
+);
 
-// Season-by-season data
-const seasons = [
-  {
-    season: '2025–26',
-    clubs: [
-      { name: 'Bath City U18', league: 'SW Counties Youth League U18', apps: 13, goals: 6, assists: 2, mins: 880, gp90: 0.61, color: '#e63946' },
-      { name: 'Melksham Town Reserves', league: 'Wiltshire Senior League Premier (Step 7)', apps: 2, goals: 0, assists: 1, mins: 45, gp90: 0.00, color: '#457b9d' },
-      { name: 'Melksham Town U18', league: 'Wilts Senior U18 Floodlight League', apps: 6, goals: 3, assists: 3, mins: 225, gp90: 1.20, color: '#457b9d' },
-    ],
-    highlights: ['Senior debut at 16', 'Academy step-up to U18'],
-  },
-  {
-    season: '2024–25',
-    clubs: [
-      { name: 'Calne Town Youth U16', league: 'North Wilts League', apps: 21, goals: 18, assists: 17, mins: 1400, gp90: 1.16, color: '#2d6a4f' },
-      { name: 'FC Wilts JPL U16', league: 'Junior Premier League', apps: 10, goals: 10, assists: 7, mins: 630, gp90: 1.43, color: '#264653' },
-      { name: 'Wiltshire FA U16', league: 'County Select', apps: 7, goals: 1, assists: 2, mins: 380, gp90: 0.24, color: '#6c757d' },
-    ],
-    highlights: ['North Wilts League Winners', 'County Cup Runners-Up', 'SW Regional Winners', 'England Schools Semi-Final'],
-  },
-  {
-    season: '2023–24',
-    clubs: [
-      { name: 'AFC Corsham U15', league: 'Mid Wilts League', apps: 23, goals: 47, assists: 26, mins: 1735, gp90: 2.44, color: '#e76f51' },
-      { name: 'FC Wilts JPL U15', league: 'Junior Premier League', apps: 12, goals: 10, assists: 7, mins: 720, gp90: 1.25, color: '#264653' },
-    ],
-    highlights: ['League 1 & Cup Double', 'AC Milan Training Camp (Italy)'],
-  },
-  {
-    season: '2022–23',
-    clubs: [
-      { name: 'AFC Corsham U14', league: 'Mid Wilts League', apps: 19, goals: 44, assists: 0, mins: 0, gp90: 2.32, color: '#e76f51' },
-    ],
-    highlights: ['2.32 goals per game'],
-  },
-];
-
-// Technical attributes
-const attributes = [
-  { name: 'Finishing', rating: 10, note: '164 goals; both feet, long-range' },
-  { name: 'Dribbling / 1v1', rating: 9, note: 'Strong, direct, beats defenders' },
-  { name: 'Chance Creation', rating: 9, note: '92 assists; vision & pass weight' },
-  { name: 'Long-range Shooting', rating: 8, note: 'Regular 20–30 yard goals' },
-  { name: 'Clutch Moments', rating: 9, note: 'Big-game performer' },
-  { name: 'Aerial Ability', rating: 7, note: 'Good jump reach' },
-];
-
-// Honours
-const honours = [
-  { title: 'SW Regional Winners', org: 'Wiltshire FA U16', year: '2024-25' },
-  { title: 'England Schools Semi-Final', org: 'Wiltshire FA U16', year: '2024-25' },
-  { title: 'North Wilts League Winners', org: 'Calne Town U16', year: '2024-25' },
-  { title: 'County Cup Runners-Up', org: 'Calne Town U16', year: '2024-25' },
-  { title: 'League & Cup Double', org: 'AFC Corsham U15', year: '2023-24' },
-  { title: 'AC Milan Training Camp', org: 'Elite European Exposure', year: 'Summer 2023' },
-];
-
-// Key matches (standout performances)
-const keyMatches = [
-  { date: '23/04/23', match: 'AFC Corsham vs Frome', result: 'Won 5-3', goals: 3, assists: 0 },
-  { date: '30/04/2023', match: 'AFC Corsham vs Melksham', result: 'Won 7-3', goals: 4, assists: 0 },
-  { date: '05/03/2023', match: 'AFC Corsham vs Castle Combe', result: 'Won 13-0', goals: 3, assists: 0 },
-  { date: '04/02/2024', match: 'AFC Corsham vs Devizes', result: 'Won 10-2', goals: 4, assists: 3 },
-  { date: '14/04/2024', match: 'AFC Corsham vs Devizes', result: 'Won 12-0', goals: 4, assists: 4 },
-  { date: '12/11/2025', match: 'Bath City vs Yeovil College', result: 'Won 6-1', goals: 3, assists: 0 },
-  { date: '6/10/2023', match: 'Calne vs Wanbourough', result: 'Won 14-0', goals: 4, assists: 2 },
-];
+// Add computed G/90 and A/90 to each club
+const seasonsWithXG = seasons.map(season => ({
+  ...season,
+  clubs: season.clubs.map(club => ({
+    ...club,
+    gp90: club.mins > 0 ? parseFloat(((club.goals / club.mins) * 90).toFixed(2)) : 0,
+    ap90: club.mins > 0 ? parseFloat(((club.assists / club.mins) * 90).toFixed(2)) : 0,
+  })),
+}));
 ---
 
-<Layout title="Olly Robinson — Striker" description={`Olly Robinson — Attacking Forward / Striker. 164 goals, 92 assists in 114 youth games. Bath City U18, Melksham Town. Age ${age}, Wiltshire.`}>
+<Layout title="Olly Robinson — Striker" description={`Olly Robinson — Attacking Forward / Striker. ${careerStats.goals} goals, ${careerStats.assists} assists in ${careerStats.apps} youth games. ${profileData.current_clubs[0]}, ${profileData.current_clubs[1]}. Age ${age}, Wiltshire.`}>
 
   <!-- JSON-LD Person -->
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": "Person",
-    "name": "Olly Robinson",
+    "name": profileData.name,
     "url": "https://or9.uk",
-    "jobTitle": "Footballer — Striker",
-    "birthDate": "2009-07",
+    "jobTitle": `Footballer — ${profileData.position}`,
+    "birthDate": profileData.dob,
     "nationality": { "@type": "Country", "name": "United Kingdom" },
-    "address": { "@type": "PostalAddress", "addressLocality": "Corsham", "addressRegion": "Wiltshire", "addressCountry": "GB" },
+    "address": { "@type": "PostalAddress", "addressLocality": profileData.location.split(', ')[0], "addressRegion": profileData.location.split(', ')[1], "addressCountry": "GB" },
     "sameAs": [
-      "https://www.instagram.com/ollyrobinsonn21",
-      "https://x.com/ollyrobinson21"
+      profileData.socials.instagram,
+      profileData.socials.x
     ],
-    "memberOf": [
-      { "@type": "SportsTeam", "name": "Bath City U18" },
-      { "@type": "SportsTeam", "name": "Melksham Town U18" },
-      { "@type": "SportsTeam", "name": "Melksham Town Reserves" }
-    ]
+    "memberOf": profileData.current_clubs.map(club => ({ "@type": "SportsTeam", "name": club }))
   })} />
 
   <!-- HERO -->
@@ -157,33 +119,36 @@ const keyMatches = [
         <div>
           <div class="flex items-center gap-3 mb-6">
             <div class="h-px w-12 bg-gold"></div>
-            <span class="font-['Oswald'] text-xs uppercase tracking-[0.3em] text-gold">Attacking Forward / Striker</span>
+            <span class="font-['Oswald'] text-xs uppercase tracking-[0.3em] text-gold">{profileData.position}</span>
           </div>
           
           <h1 class="font-['Oswald'] text-7xl sm:text-8xl lg:text-9xl font-bold uppercase leading-[0.85] tracking-tight mb-4">
-            <span class="text-cream">Olly</span><br>
-            <span class="gold-shimmer">Robinson</span>
+            <span class="text-cream">{profileData.name.split(' ')[0]}</span><br>
+            <span class="gold-shimmer">{profileData.name.split(' ')[1]}</span>
           </h1>
 
           <div class="flex items-center gap-4 mb-6">
-            <a href="https://www.instagram.com/ollyrobinsonn21" target="_blank" rel="noopener noreferrer" class="text-cream-muted hover:text-gold transition-colors" aria-label="Instagram">
+            <a href={profileData.socials.instagram} target="_blank" rel="noopener noreferrer" class="text-cream-muted hover:text-gold transition-colors" aria-label="Instagram">
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
             </a>
-            <a href="https://x.com/ollyrobinson21" target="_blank" rel="noopener noreferrer" class="text-cream-muted hover:text-gold transition-colors" aria-label="X">
+            <a href={profileData.socials.x} target="_blank" rel="noopener noreferrer" class="text-cream-muted hover:text-gold transition-colors" aria-label="X">
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
             </a>
           </div>
 
           <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm text-cream-muted mb-8">
-            <span>🎂 July 2009 (Age {age})</span>
-            <span>📏 178cm / 68kg</span>
-            <span>🦶 Right-footed (Strong Left)</span>
-            <span>📍 Corsham, Wiltshire</span>
-            <span>🇬🇧 British</span>
+            <span>🎂 {dobMonth === 7 ? 'July' : dobMonth} {dobYear} (Age {age})</span>
+            <span>📏 {profileData.height} / {profileData.weight}</span>
+            <span>🦶 {profileData.foot}</span>
+            <span>📍 {profileData.location}</span>
+            <span>🇬🇧 {profileData.nationality}</span>
           </div>
 
           <p class="text-lg text-cream/80 font-light max-w-xl leading-relaxed italic border-l-2 border-gold/50 pl-5">
-            "Consistent, powerful finisher — <span class="text-gold font-medium not-italic">164 goals</span> + <span class="text-gold font-medium not-italic">92 assists</span> in 114 youth games. Now in U18 & senior reserve football at 16."
+            "Consistent, powerful finisher — <span class="text-gold font-medium not-italic">{careerStats.goals} goals</span> + <span class="text-gold font-medium not-italic">{careerStats.assists} assists</span> in {careerStats.apps} games. Now in U18 & senior reserve football at {age}."
+          </p>
+          <p class="text-xs text-cream-muted mt-2 pl-5 ml-0.5">
+            U15–U18 &amp; Senior Reserves · 2023–Present
           </p>
         </div>
 
@@ -211,9 +176,12 @@ const keyMatches = [
       <div class="mt-12 flex items-center gap-4 text-cream-muted">
         <span class="text-xs uppercase tracking-widest">Current clubs</span>
         <div class="h-px flex-1 bg-pitch-line"></div>
-        <span class="font-['Oswald'] text-sm text-cream">Bath City U18</span>
-        <span class="text-pitch-line">·</span>
-        <span class="font-['Oswald'] text-sm text-cream">Melksham Town</span>
+        {profileData.current_clubs.map((club, idx) => (
+          <>
+            <span class="font-['Oswald'] text-sm text-cream">{club}</span>
+            {idx < profileData.current_clubs.length - 1 && <span class="text-pitch-line">·</span>}
+          </>
+        ))}
       </div>
     </div>
   </section>
@@ -255,7 +223,7 @@ const keyMatches = [
       </div>
 
       <div class="space-y-12">
-        {seasons.map(s => (
+        {seasonsWithXG.map(s => (
           <div>
             <div class="flex items-center gap-4 mb-6">
               <span class="font-['Oswald'] text-2xl font-bold text-gold">{s.season}</span>
@@ -300,7 +268,11 @@ const keyMatches = [
                       )}
                       <div class="text-center">
                         <div class="font-['Oswald'] text-2xl font-bold text-fire">{club.gp90.toFixed(2)}</div>
-                        <div class="text-xs text-cream-muted uppercase tracking-widest">xG p90</div>
+                        <div class="text-xs text-cream-muted uppercase tracking-widest">G/90</div>
+                      </div>
+                      <div class="text-center">
+                        <div class="font-['Oswald'] text-2xl font-bold text-cream">{club.ap90.toFixed(2)}</div>
+                        <div class="text-xs text-cream-muted uppercase tracking-widest">A/90</div>
                       </div>
                     </div>
                   </div>
@@ -375,27 +347,27 @@ const keyMatches = [
         <div>
           <h3 class="font-['Oswald'] text-xs text-gold uppercase tracking-widest mb-4">Physical</h3>
           <div class="space-y-2 text-sm">
-            <div class="flex justify-between"><span class="text-cream-muted">Height</span><span>178 cm</span></div>
-            <div class="flex justify-between"><span class="text-cream-muted">Weight</span><span>77 kg</span></div>
-            <div class="flex justify-between"><span class="text-cream-muted">Preferred Foot</span><span>Right (Strong Left)</span></div>
-            <div class="flex justify-between"><span class="text-cream-muted">Position</span><span>Striker / Forward</span></div>
+            <div class="flex justify-between"><span class="text-cream-muted">Height</span><span>{profileData.height}</span></div>
+            <div class="flex justify-between"><span class="text-cream-muted">Weight</span><span>{profileData.weight}</span></div>
+            <div class="flex justify-between"><span class="text-cream-muted">Preferred Foot</span><span>{profileData.foot}</span></div>
+            <div class="flex justify-between"><span class="text-cream-muted">Position</span><span>{profileData.position}</span></div>
           </div>
         </div>
         <div>
           <h3 class="font-['Oswald'] text-xs text-gold uppercase tracking-widest mb-4">Personal</h3>
           <div class="space-y-2 text-sm">
-            <div class="flex justify-between"><span class="text-cream-muted">Date of Birth</span><span>July 2009</span></div>
+            <div class="flex justify-between"><span class="text-cream-muted">Date of Birth</span><span>{dobMonth === 7 ? 'July' : dobMonth} {dobYear}</span></div>
             <div class="flex justify-between"><span class="text-cream-muted">Age</span><span>{age}</span></div>
-            <div class="flex justify-between"><span class="text-cream-muted">Nationality</span><span>British</span></div>
-            <div class="flex justify-between"><span class="text-cream-muted">Location</span><span>Corsham, Wiltshire</span></div>
+            <div class="flex justify-between"><span class="text-cream-muted">Nationality</span><span>{profileData.nationality}</span></div>
+            <div class="flex justify-between"><span class="text-cream-muted">Location</span><span>{profileData.location}</span></div>
           </div>
         </div>
         <div>
           <h3 class="font-['Oswald'] text-xs text-gold uppercase tracking-widest mb-4">Current Clubs</h3>
           <div class="space-y-2 text-sm">
-            <div class="flex justify-between"><span class="text-cream-muted">Academy</span><span>Bath City U18</span></div>
-            <div class="flex justify-between"><span class="text-cream-muted">Dual Reg</span><span>Melksham Town U18</span></div>
-            <div class="flex justify-between"><span class="text-cream-muted">Senior</span><span>Melksham Town Reserves</span></div>
+            <div class="flex justify-between"><span class="text-cream-muted">Academy</span><span>{profileData.current_clubs[0]}</span></div>
+            <div class="flex justify-between"><span class="text-cream-muted">Dual Reg</span><span>{profileData.current_clubs[1]}</span></div>
+            <div class="flex justify-between"><span class="text-cream-muted">Senior</span><span>{profileData.current_clubs[2]}</span></div>
           </div>
         </div>
       </div>
@@ -445,13 +417,13 @@ const keyMatches = [
     <div class="max-w-7xl mx-auto px-6 sm:px-10 py-12">
       <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
         <div>
-          <span class="font-['Oswald'] text-2xl font-bold uppercase tracking-wide">Olly Robinson</span>
+          <span class="font-['Oswald'] text-2xl font-bold uppercase tracking-wide">{profileData.name}</span>
           <span class="text-cream-muted text-sm ml-3">⚽ Striker · Age {age} · Wiltshire</span>
         </div>
         <div class="flex items-center gap-6 text-sm text-cream-muted">
           <a href={`${BASE}footage/`} class="hover:text-gold transition-colors">📹 Footage</a>
-          <a href="https://www.instagram.com/ollyrobinsonn21" target="_blank" rel="noopener noreferrer" class="hover:text-gold transition-colors">Instagram</a>
-          <a href="https://x.com/ollyrobinson21" target="_blank" rel="noopener noreferrer" class="hover:text-gold transition-colors">𝕏</a>
+          <a href={profileData.socials.instagram} target="_blank" rel="noopener noreferrer" class="hover:text-gold transition-colors">Instagram</a>
+          <a href={profileData.socials.x} target="_blank" rel="noopener noreferrer" class="hover:text-gold transition-colors">𝕏</a>
         </div>
       </div>
     </div>

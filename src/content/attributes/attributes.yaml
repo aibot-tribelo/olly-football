@@ -1,0 +1,19 @@
+attributes:
+  - name: "Finishing"
+    rating: 10
+    note: "Prolific scorer; both feet, long-range"
+  - name: "Dribbling / 1v1"
+    rating: 9
+    note: "Strong, direct, beats defenders"
+  - name: "Chance Creation"
+    rating: 9
+    note: "Elite vision & pass weight"
+  - name: "Long-range Shooting"
+    rating: 8
+    note: "Regular 20–30 yard goals"
+  - name: "Clutch Moments"
+    rating: 9
+    note: "Big-game performer"
+  - name: "Aerial Ability"
+    rating: 7
+    note: "Good jump reach"
