@@ -24,6 +24,11 @@ const attributes = attributesEntry.data.attributes;
 
 const gpsEntry = await getEntry('gps', 'gps');
 const gpsSessions = gpsEntry.data.sessions.filter(s => s.has_data);
+const avgMPerMin = gpsSessions.reduce((sum, s) => sum + s.metres_per_min, 0) / gpsSessions.length;
+const gpsSessionsWithEst = gpsSessions.map(s => ({
+  ...s,
+  est_mins: Math.round(s.distance_m / avgMPerMin),
+}));
 const gpsStats = {
   matches: gpsSessions.length,
   avgDistance: Math.round(gpsSessions.reduce((sum, s) => sum + s.distance_m, 0) / gpsSessions.length),
@@ -257,11 +262,14 @@ const seasonsWithXG = seasons.map(season => ({
 
       <!-- Per-match breakdown -->
       <div class="grid gap-4">
-        {gpsSessions.map(s => (
-          <div class="bg-surface-elevated/40 border border-pitch-line rounded-sm p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-gold/20 transition-colors">
+        {gpsSessionsWithEst.map(s => (
+          <a href={`${BASE}gps/${s.session_id}/`} class="block bg-surface-elevated/40 border border-pitch-line rounded-sm p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-gold/20 transition-colors group">
             <div>
-              <div class="font-['Oswald'] text-sm uppercase tracking-wide text-cream">{s.match}</div>
-              <div class="text-xs text-cream-muted">{new Date(s.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
+              <div class="font-['Oswald'] text-sm uppercase tracking-wide text-cream group-hover:text-gold transition-colors">{s.match}</div>
+              <div class="text-xs text-cream-muted">
+                {new Date(s.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                <span class={s.est_mins < 75 ? 'text-gold' : ''}>· ~{s.est_mins} mins</span>
+              </div>
             </div>
             <div class="flex items-center gap-6 sm:gap-8">
               <div class="text-center">
@@ -277,7 +285,7 @@ const seasonsWithXG = seasons.map(season => ({
                 <div class="font-['Oswald'] text-xl font-bold text-fire">{s.high_intensity}<span class="text-sm text-cream-muted"> HI</span></div>
               </div>
             </div>
-          </div>
+          </a>
         ))}
       </div>
 
