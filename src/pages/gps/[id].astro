@@ -12,6 +12,11 @@ const s = allSessions.find(s => s.session_id === id);
 
 if (!s || !s.has_data) return Astro.redirect(`${BASE}gps/`);
 
+const validSessions = allSessions.filter(x => x.has_data);
+const bestDistance = Math.max(...validSessions.map(x => x.distance_m));
+const estMins = Math.min(90, Math.round(90 * s.distance_m / bestDistance));
+const estPct = Math.min(100, Math.round(s.distance_m / bestDistance * 100));
+
 const dateStr = new Date(s.date).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
 // Speed zone breakdown (sorted fastest → slowest)
@@ -54,7 +59,9 @@ export async function getStaticPaths() {
         <h1 class="font-['Oswald'] text-4xl sm:text-5xl font-bold uppercase leading-tight tracking-tight mb-2">
           <span class="text-cream">{s.match}</span>
         </h1>
-        <p class="text-cream-muted text-sm">{dateStr} · {s.duration_mins} minutes</p>
+        <p class="text-cream-muted text-sm">
+          {dateStr} · Est. <span class={`font-medium ${estPct < 80 ? 'text-gold' : 'text-cream'}`}>~{estMins} mins played ({estPct}%)</span>
+        </p>
       </div>
 
       <!-- Key metrics — 4 big cards -->
