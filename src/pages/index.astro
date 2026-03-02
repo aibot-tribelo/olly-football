@@ -24,10 +24,14 @@ const attributes = attributesEntry.data.attributes;
 
 const gpsEntry = await getEntry('gps', 'gps');
 const gpsSessions = gpsEntry.data.sessions.filter(s => s.has_data);
-const avgMPerMin = gpsSessions.reduce((sum, s) => sum + s.metres_per_min, 0) / gpsSessions.length;
+const maxDist = Math.max(...gpsSessions.map(s => s.distance_m));
+const fullMatchSessions = gpsSessions.filter(s => s.distance_m > maxDist * 0.5);
+const avgPlayingMPM = fullMatchSessions.reduce((sum, s) => {
+  return sum + s.metres_per_min * (s.duration_mins / (s.duration_mins - 15));
+}, 0) / fullMatchSessions.length;
 const gpsSessionsWithEst = gpsSessions.map(s => ({
   ...s,
-  est_mins: Math.round(s.distance_m / avgMPerMin),
+  est_mins: Math.min(90, Math.round(s.distance_m / avgPlayingMPM)),
 }));
 const gpsStats = {
   matches: gpsSessions.length,

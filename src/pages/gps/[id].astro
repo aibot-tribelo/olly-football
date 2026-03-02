@@ -13,8 +13,12 @@ const s = allSessions.find(s => s.session_id === id);
 if (!s || !s.has_data) return Astro.redirect(`${BASE}gps/`);
 
 const validSessions = allSessions.filter(x => x.has_data);
-const avgMPerMin = validSessions.reduce((sum, x) => sum + x.metres_per_min, 0) / validSessions.length;
-const estMins = Math.round(s.distance_m / avgMPerMin);
+const maxDist = Math.max(...validSessions.map(x => x.distance_m));
+const fullMatchSessions = validSessions.filter(x => x.distance_m > maxDist * 0.5);
+const avgPlayingMPM = fullMatchSessions.reduce((sum, x) => {
+  return sum + x.metres_per_min * (x.duration_mins / (x.duration_mins - 15));
+}, 0) / fullMatchSessions.length;
+const estMins = Math.min(90, Math.round(s.distance_m / avgPlayingMPM));
 
 const dateStr = new Date(s.date).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
