@@ -3,14 +3,12 @@ import Layout from '../../layouts/Layout.astro';
 
 const BASE = import.meta.env.BASE_URL;
 
-// Placeholder footage entries — replace with real links
 const videos = [
-  { title: '2025/26 Striker Highlights', description: 'Bath City U18 & Melksham Town — Season compilation', type: 'highlight', link: '#', duration: '3:30' },
-  { title: 'Bath City vs Yeovil College', description: 'Hat-trick performance — Won 6-1', type: 'match', link: '#', duration: '5:00' },
-  { title: 'Calne Town vs Wanbourough', description: '4 goals, 2 assists — Won 14-0', type: 'match', link: '#', duration: '4:15' },
-  { title: 'AFC Corsham vs Devizes', description: '4 goals, 4 assists — Won 12-0', type: 'match', link: '#', duration: '6:00' },
-  { title: 'Wiltshire FA U16 — County Matches', description: 'SW Regional Winners campaign highlights', type: 'highlight', link: '#', duration: '4:00' },
-  { title: 'AC Milan Training Camp', description: 'Summer 2023 — Elite training footage', type: 'training', link: '#', duration: '2:00' },
+  { id: 'TMCEEEKN_fk', title: 'Calne U16 vs Swindon Supermarine — Goal', description: 'September 2024', type: 'match' },
+  { id: '6XvCLzA53YM', title: 'Dutch International Tournament — Clips (1)', description: 'Summer 2024', type: 'highlight' },
+  { id: 'C_TTKECG0Cc', title: 'Dutch International Tournament — Clips (2)', description: 'Summer 2024', type: 'highlight' },
+  { id: 'KkvmGcuv8nE', title: 'AFC Corsham U15 vs Bradford — Cup Final Goals', description: 'Cup Final 2023-24', type: 'match' },
+  { id: 'LhVojvKhg2U', title: 'JPL Goal of the Month — FC Wilts U15', description: 'October 2023', type: 'highlight' },
 ];
 
 const typeColors: Record<string, string> = {
@@ -20,7 +18,7 @@ const typeColors: Record<string, string> = {
 };
 ---
 
-<Layout title="Footage — Olly Robinson" description="Match footage, highlights and training clips for Olly Robinson.">
+<Layout title="Footage — Olly Robinson" description="Match footage, highlights and goals for Olly Robinson — Striker.">
 
   <nav class="fixed top-0 left-0 right-0 z-50 bg-pitch/80 backdrop-blur-md border-b border-pitch-line/50">
     <div class="max-w-7xl mx-auto px-6 sm:px-10 h-14 flex items-center justify-between">
@@ -29,7 +27,7 @@ const typeColors: Record<string, string> = {
     </div>
   </nav>
 
-  <main class="min-h-screen pitch-pattern pt-24 pb-20">
+  <main id="main" class="min-h-screen pitch-pattern pt-24 pb-20">
     <div class="max-w-7xl mx-auto px-6 sm:px-10">
 
       <!-- Header -->
@@ -42,19 +40,24 @@ const typeColors: Record<string, string> = {
           <span class="text-cream">Watch</span> <span class="text-gold">Olly</span>
         </h1>
         <p class="text-cream-muted text-sm max-w-lg">
-          Match highlights, full-game footage, and training clips. Links to Veo, YouTube, and Google Drive.
+          Match highlights, goals and tournament clips.
         </p>
       </div>
 
       <!-- Video Grid -->
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {videos.map(v => (
-          <a href={v.link} class="group bg-surface-elevated/60 border border-pitch-line rounded-sm overflow-hidden hover:border-gold/30 transition-all">
-            <!-- Placeholder thumbnail -->
-            <div class="aspect-video bg-pitch-light flex items-center justify-center relative overflow-hidden">
-              <div class="absolute inset-0 bg-gradient-to-t from-pitch/80 to-transparent"></div>
-              <svg class="w-16 h-16 text-gold/30 group-hover:text-gold/60 transition-colors relative z-10" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-              <span class="absolute bottom-3 right-3 text-xs font-mono text-cream-muted bg-pitch/80 px-2 py-0.5 rounded">{v.duration}</span>
+          <div class="group bg-surface-elevated/60 border border-pitch-line rounded-sm overflow-hidden hover:border-gold/30 transition-all">
+            <!-- YouTube embed -->
+            <div class="aspect-video">
+              <iframe
+                src={`https://www.youtube-nocookie.com/embed/${v.id}`}
+                title={v.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                loading="lazy"
+                class="w-full h-full"
+              ></iframe>
             </div>
             <div class="p-5">
               <div class="flex items-center gap-2 mb-2">
@@ -63,11 +66,11 @@ const typeColors: Record<string, string> = {
               <h3 class="font-['Oswald'] text-base uppercase tracking-wide text-cream group-hover:text-gold transition-colors mb-1">{v.title}</h3>
               <p class="text-xs text-cream-muted">{v.description}</p>
             </div>
-          </a>
+          </div>
         ))}
       </div>
 
-      <!-- Coming soon note -->
+      <!-- More coming -->
       <div class="mt-16 text-center border border-dashed border-pitch-line rounded-sm p-10">
         <div class="font-['Oswald'] text-xl uppercase tracking-wide text-cream-muted mb-2">More footage coming soon</div>
         <p class="text-xs text-cream-muted">Full match recordings and new highlight reels will be added throughout the season.</p>

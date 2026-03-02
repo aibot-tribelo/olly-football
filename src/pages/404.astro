@@ -1,0 +1,15 @@
+---
+import Layout from '../layouts/Layout.astro';
+const BASE = import.meta.env.BASE_URL;
+---
+
+<Layout title="Page Not Found — OR9" description="This page doesn't exist.">
+  <main class="min-h-screen pitch-pattern flex items-center justify-center">
+    <div class="text-center px-6">
+      <div class="font-['Oswald'] text-[10rem] sm:text-[14rem] font-bold leading-none text-gold/10 select-none">404</div>
+      <div class="font-['Oswald'] text-2xl sm:text-3xl uppercase tracking-wide text-cream -mt-10 mb-4">Offside</div>
+      <p class="text-cream-muted text-sm mb-8">That page doesn't exist. Back to the pitch.</p>
+      <a href={BASE} class="inline-block font-['Oswald'] text-sm uppercase tracking-widest bg-gold text-pitch px-8 py-3 rounded-sm hover:bg-gold-dim transition-colors font-semibold">Back to Profile</a>
+    </div>
+  </main>
+</Layout>
