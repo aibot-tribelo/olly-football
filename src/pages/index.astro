@@ -255,9 +255,12 @@ const seasonsWithXG = seasons.map(season => ({
       <!-- Per-match breakdown -->
       <div class="grid gap-4">
         {gpsSessionsWithEst.map(s => (
-          <a href={`${BASE}gps/${s.date}/`} class="block bg-surface-elevated/40 border border-pitch-line rounded-sm p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-gold/20 transition-colors group">
+          <a href={`${BASE}gps/${s.date}/`} class="block bg-surface-elevated/40 border border-pitch-line rounded-sm p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-gold/40 hover:bg-surface-elevated/60 transition-all group cursor-pointer">
             <div>
-              <div class="font-['Oswald'] text-sm uppercase tracking-wide text-cream group-hover:text-gold transition-colors">{s.match}</div>
+              <div class="font-['Oswald'] text-sm uppercase tracking-wide text-cream group-hover:text-gold transition-colors flex items-center gap-2">
+                {clubLogos[s.match] && <img src={clubLogos[s.match]} alt="" class="w-5 h-5 object-contain" width="20" height="20" loading="lazy" />}
+                {s.match}
+              </div>
               <div class="text-xs text-cream-muted">
                 {new Date(s.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                 <span class={s.playing_mins < 75 ? 'text-gold' : ''}>· {s.is_estimate ? '~' : ''}{s.playing_mins} mins</span>
@@ -276,6 +279,7 @@ const seasonsWithXG = seasons.map(season => ({
               <div class="text-center">
                 <div class="font-['Oswald'] text-xl font-bold text-amber">{s.high_intensity}<span class="text-sm text-cream-muted"> HI</span></div>
               </div>
+              <svg class="w-5 h-5 text-cream-muted/40 group-hover:text-gold group-hover:translate-x-1 transition-all shrink-0 hidden sm:block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
             </div>
           </a>
         ))}
