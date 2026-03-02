@@ -14,19 +14,19 @@
 }
 
 @font-face {
-  font-family: 'Oswald';
+  font-family: 'Inter';
   font-style: normal;
-  font-weight: 400;
+  font-weight: 300 700;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/oswald/v53/TK3_WkUHHAIjg75cFRf3bXL8LICs1_FvsUZiYA.woff2) format('woff2');
+  src: url('/fonts/inter-variable.woff2') format('woff2');
 }
 
 @font-face {
   font-family: 'Oswald';
   font-style: normal;
-  font-weight: 700;
+  font-weight: 400 700;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/oswald/v53/TK3_WkUHHAIjg75cFRf3bXL8LICs1xpqsUZiYA.woff2) format('woff2');
+  src: url('/fonts/oswald-variable.woff2') format('woff2');
 }
 
 html {
