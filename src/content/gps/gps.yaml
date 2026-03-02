@@ -2,7 +2,7 @@ sessions:
   - date: "2026-02-07"
     match: "Bath City U18"
     session_id: "4db654a0-a370-484f-b2ce-9737be4c72fe"
-    actual_mins: 70
+    actual_mins: 75
     duration_mins: 105
     has_data: true
     distance_m: 6334
