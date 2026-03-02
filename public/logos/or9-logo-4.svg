@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 100" fill="none">
+  <!-- Stacked monogram with stripe -->
+  <rect x="0" y="0" width="240" height="100" rx="8" fill="#0a1a0a"/>
+  <!-- Gold stripe -->
+  <rect x="0" y="0" width="6" height="100" fill="#f5c518" rx="3"/>
+  <!-- OR9 -->
+  <text x="125" y="70" text-anchor="middle" font-family="'Oswald', sans-serif" font-size="68" font-weight="700" letter-spacing="8">
+    <tspan fill="#ffffff">O</tspan><tspan fill="#ffffff">R</tspan><tspan fill="#f5c518">9</tspan>
+  </text>
+  <!-- Subtle tagline -->
+  <text x="125" y="90" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#8a8a8a" letter-spacing="5" text-transform="uppercase">STRIKER</text>
+</svg>

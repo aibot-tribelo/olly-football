@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- Shield/badge shape -->
+  <path d="M100 10 L180 50 L180 130 Q180 180 100 190 Q20 180 20 130 L20 50 Z" fill="#0a1a0a" stroke="#f5c518" stroke-width="3"/>
+  <!-- Inner glow line -->
+  <path d="M100 22 L170 56 L170 128 Q170 172 100 182 Q30 172 30 128 L30 56 Z" fill="none" stroke="#f5c518" stroke-width="0.5" opacity="0.3"/>
+  <!-- OR text -->
+  <text x="100" y="105" text-anchor="middle" font-family="'Oswald', sans-serif" font-size="48" font-weight="700" fill="#ffffff" letter-spacing="6">OR</text>
+  <!-- Big 9 -->
+  <text x="100" y="160" text-anchor="middle" font-family="'Oswald', sans-serif" font-size="56" font-weight="700" fill="#f5c518">9</text>
+  <!-- Top accent line -->
+  <line x1="60" y1="62" x2="140" y2="62" stroke="#f5c518" stroke-width="1.5" opacity="0.5"/>
+</svg>
