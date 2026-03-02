@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Font Preview — OR9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Oswald:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Sora:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a1a0a; color: #f5f0e8; font-family: 'Inter', sans-serif; padding: 40px 20px; }
+  .grid { display: grid; grid-template-columns: 1fr; gap: 40px; max-width: 900px; margin: 0 auto; }
+  @media (min-width: 768px) { .grid { grid-template-columns: 1fr 1fr; } }
+  
+  .card { background: rgba(255,255,255,0.03); border: 1px solid rgba(245,197,24,0.15); border-radius: 4px; padding: 32px; }
+  .card:hover { border-color: rgba(245,197,24,0.4); }
+  .card-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #f5c518; margin-bottom: 4px; }
+  .card-sublabel { font-size: 11px; color: rgba(245,240,232,0.4); margin-bottom: 24px; }
+  
+  .heading { font-size: 48px; font-weight: 700; text-transform: uppercase; letter-spacing: -0.02em; line-height: 0.9; margin-bottom: 8px; }
+  .subheading { font-size: 24px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px; }
+  .gold { color: #f5c518; }
+  
+  .stats { display: flex; gap: 24px; margin: 20px 0; }
+  .stat-num { font-size: 36px; font-weight: 700; line-height: 1; }
+  .stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: rgba(245,240,232,0.5); margin-top: 4px; }
+  
+  .body-text { font-size: 14px; color: rgba(245,240,232,0.6); line-height: 1.6; margin-top: 16px; }
+  
+  .pill { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; border: 1px solid rgba(245,197,24,0.3); color: #f5c518; padding: 6px 16px; border-radius: 2px; margin-top: 16px; }
+
+  .title { text-align: center; margin-bottom: 40px; }
+  .title h1 { font-family: 'Inter'; font-size: 14px; font-weight: 400; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(245,240,232,0.4); }
+
+  /* Font families */
+  .font-oswald .heading, .font-oswald .subheading, .font-oswald .stat-num, .font-oswald .pill { font-family: 'Oswald', sans-serif; }
+  .font-space .heading, .font-space .subheading, .font-space .stat-num, .font-space .pill { font-family: 'Space Grotesk', sans-serif; }
+  .font-sora .heading, .font-sora .subheading, .font-sora .stat-num, .font-sora .pill { font-family: 'Sora', sans-serif; }
+  .font-outfit .heading, .font-outfit .subheading, .font-outfit .stat-num, .font-outfit .pill { font-family: 'Outfit', sans-serif; }
+  .font-jakarta .heading, .font-jakarta .subheading, .font-jakarta .stat-num, .font-jakarta .pill { font-family: 'Plus Jakarta Sans', sans-serif; }
+</style>
+</head>
+<body>
+
+<div class="title">
+  <h1>Font Comparison — OR9.uk</h1>
+</div>
+
+<div class="grid">
+
+  <!-- 1. Current: Oswald -->
+  <div class="card font-oswald">
+    <div class="card-label">Option A — Current</div>
+    <div class="card-sublabel">Oswald + Inter</div>
+    <div class="heading">Olly <span class="gold">Robinson</span></div>
+    <div class="subheading">Striker · #9</div>
+    <div class="stats">
+      <div><div class="stat-num gold">27.8</div><div class="stat-label">Top Speed</div></div>
+      <div><div class="stat-num">96</div><div class="stat-label">Apps</div></div>
+      <div><div class="stat-num">95</div><div class="stat-label">Goals</div></div>
+    </div>
+    <div class="body-text">Physical performance data tracked via PlayerData GPS vests during Bath City U18 matches.</div>
+    <div class="pill">View GPS Data →</div>
+  </div>
+
+  <!-- 2. Space Grotesk -->
+  <div class="card font-space">
+    <div class="card-label">Option B</div>
+    <div class="card-sublabel">Space Grotesk + Inter</div>
+    <div class="heading">Olly <span class="gold">Robinson</span></div>
+    <div class="subheading">Striker · #9</div>
+    <div class="stats">
+      <div><div class="stat-num gold">27.8</div><div class="stat-label">Top Speed</div></div>
+      <div><div class="stat-num">96</div><div class="stat-label">Apps</div></div>
+      <div><div class="stat-num">95</div><div class="stat-label">Goals</div></div>
+    </div>
+    <div class="body-text">Physical performance data tracked via PlayerData GPS vests during Bath City U18 matches.</div>
+    <div class="pill">View GPS Data →</div>
+  </div>
+
+  <!-- 3. Sora -->
+  <div class="card font-sora">
+    <div class="card-label">Option C</div>
+    <div class="card-sublabel">Sora + Inter</div>
+    <div class="heading">Olly <span class="gold">Robinson</span></div>
+    <div class="subheading">Striker · #9</div>
+    <div class="stats">
+      <div><div class="stat-num gold">27.8</div><div class="stat-label">Top Speed</div></div>
+      <div><div class="stat-num">96</div><div class="stat-label">Apps</div></div>
+      <div><div class="stat-num">95</div><div class="stat-label">Goals</div></div>
+    </div>
+    <div class="body-text">Physical performance data tracked via PlayerData GPS vests during Bath City U18 matches.</div>
+    <div class="pill">View GPS Data →</div>
+  </div>
+
+  <!-- 4. Outfit -->
+  <div class="card font-outfit">
+    <div class="card-label">Option D</div>
+    <div class="card-sublabel">Outfit + Inter</div>
+    <div class="heading">Olly <span class="gold">Robinson</span></div>
+    <div class="subheading">Striker · #9</div>
+    <div class="stats">
+      <div><div class="stat-num gold">27.8</div><div class="stat-label">Top Speed</div></div>
+      <div><div class="stat-num">96</div><div class="stat-label">Apps</div></div>
+      <div><div class="stat-num">95</div><div class="stat-label">Goals</div></div>
+    </div>
+    <div class="body-text">Physical performance data tracked via PlayerData GPS vests during Bath City U18 matches.</div>
+    <div class="pill">View GPS Data →</div>
+  </div>
+
+  <!-- 5. Plus Jakarta Sans (both) -->
+  <div class="card font-jakarta" style="grid-column: 1 / -1;">
+    <div class="card-label">Option E</div>
+    <div class="card-sublabel">Plus Jakarta Sans (headings + body)</div>
+    <div class="heading">Olly <span class="gold">Robinson</span></div>
+    <div class="subheading">Striker · #9</div>
+    <div class="stats">
+      <div><div class="stat-num gold">27.8</div><div class="stat-label">Top Speed</div></div>
+      <div><div class="stat-num">96</div><div class="stat-label">Apps</div></div>
+      <div><div class="stat-num">95</div><div class="stat-label">Goals</div></div>
+      <div><div class="stat-num">65</div><div class="stat-label">Assists</div></div>
+      <div><div class="stat-num gold">1.67</div><div class="stat-label">G/A Ratio</div></div>
+    </div>
+    <div class="body-text">Physical performance data tracked via PlayerData GPS vests during Bath City U18 matches · 2025-26 season · 6 sessions tracked.</div>
+    <div class="pill">View GPS Data →</div>
+  </div>
+
+</div>
+
+</body>
+</html>
