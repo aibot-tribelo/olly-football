@@ -7,6 +7,12 @@ import { existsSync } from 'fs';
 const BASE = import.meta.env.BASE_URL;
 const SITE = 'https://or9.uk';
 
+const clubLogos: Record<string, string> = {
+  'Bath City U18': `${BASE}clubs/bath-city.png`,
+  'Melksham Town U18': `${BASE}clubs/melksham-town.png`,
+  'Melksham Town Reserves': `${BASE}clubs/melksham-town.png`,
+};
+
 const gpsEntry = await getEntry('gps', 'gps');
 const allSessions = gpsEntry.data.sessions;
 
@@ -89,7 +95,8 @@ export async function getStaticPaths() {
           <div class="h-px w-12 bg-gold"></div>
           <span class="font-['Oswald'] text-xs uppercase tracking-[0.3em] text-gold">Match Session</span>
         </div>
-        <h1 class="font-['Oswald'] text-4xl sm:text-5xl font-bold uppercase leading-tight tracking-tight mb-2">
+        <h1 class="font-['Oswald'] text-4xl sm:text-5xl font-bold uppercase leading-tight tracking-tight mb-2 flex items-center gap-4">
+          {clubLogos[s.match] && <img src={clubLogos[s.match]} alt={`${s.match} badge`} class="w-12 h-12 sm:w-14 sm:h-14 object-contain" width="56" height="56" />}
           <span class="text-cream">{s.match}</span>
         </h1>
         <p class="text-cream-muted text-sm">
