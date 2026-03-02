@@ -486,6 +486,9 @@ const seasonsWithXG = seasons.map(season => ({
           { src: 'cup-winner.jpg', alt: 'Cup winner — AFC Corsham', span: '' },
           { src: 'beach-football.jpg', alt: 'Beach football — Italy', span: '' },
           { src: 'wiltshire-team.jpg', alt: 'Wiltshire Schools FA U16 — 3-2 winners vs Gloucestershire', span: 'md:col-span-2' },
+          { src: 'team-huddle.jpg', alt: 'Bath City U18 team huddle before kick-off', span: 'md:col-span-2' },
+          { src: 'rounding-keeper.jpg', alt: 'Olly Robinson rounding the goalkeeper', span: '' },
+          { src: 'aerial-duel.jpg', alt: 'Olly Robinson winning an aerial duel', span: '' },
         ].map(photo => (
           <button data-gallery-index={String(photo.src)} class={`relative overflow-hidden rounded-sm group cursor-pointer ${photo.span}`}>
             <img src={`${BASE}photos/${photo.src}`} alt={photo.alt} class="w-full h-full object-cover aspect-square group-hover:scale-105 transition-transform duration-500" loading="lazy" />
@@ -540,6 +543,9 @@ const seasonsWithXG = seasons.map(season => ({
     { src: 'cup-winner.jpg', alt: 'Cup winner — AFC Corsham' },
     { src: 'beach-football.jpg', alt: 'Beach football — Italy' },
     { src: 'wiltshire-team.jpg', alt: 'Wiltshire Schools FA U16 — 3-2 winners vs Gloucestershire' },
+    { src: 'team-huddle.jpg', alt: 'Bath City U18 team huddle before kick-off' },
+    { src: 'rounding-keeper.jpg', alt: 'Olly Robinson rounding the goalkeeper' },
+    { src: 'aerial-duel.jpg', alt: 'Olly Robinson winning an aerial duel' },
   ];
 
   const basePath = '/';
