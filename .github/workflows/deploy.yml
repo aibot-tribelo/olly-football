@@ -24,7 +24,7 @@ jobs:
         env:
           PLAYERDATA_EMAIL: ${{ secrets.PLAYERDATA_EMAIL }}
           PLAYERDATA_PASSWORD: ${{ secrets.PLAYERDATA_PASSWORD }}
-        run: bash scripts/fetch-playerdata.sh
+        run: node scripts/fetch-playerdata.mjs
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3
         with:
