@@ -7,7 +7,7 @@ on:
     - cron: '0 6 * * 1'  # Monday 6am UTC
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -26,6 +26,12 @@ jobs:
           PLAYERDATA_PASSWORD: ${{ secrets.PLAYERDATA_PASSWORD }}
           XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
         run: node scripts/fetch-playerdata.mjs
+      - name: Commit updated gps.yaml (caches AI taglines + new session data)
+        run: |
+          git config user.name "enzo-aibot"
+          git config user.email "aibot@tribelo.co.uk"
+          git add src/content/gps/gps.yaml
+          git diff --staged --quiet || git commit -m "data(gps): update GPS data + AI taglines [skip ci]" && git push
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3
         with:
