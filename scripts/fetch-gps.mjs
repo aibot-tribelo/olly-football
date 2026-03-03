@@ -152,6 +152,40 @@ Examples of good taglines:
   }
 }
 
+async function generatePerformanceSummary(sessions, zoneByDate) {
+  if (!XAI_API_KEY) return null;
+
+  const dataSessions = sessions.filter(s => s.has_data);
+  if (dataSessions.length < 2) return null;
+
+  const rows = dataSessions.map(s => {
+    const result = s.result ? ` [${s.result.toUpperCase()}${s.score ? ` ${s.score}` : ''}]` : '';
+    const zone = zoneByDate?.[s.date];
+    const zoneLine = zone ? ` | ${zone.sprintZone ?? ''} ${zone.channel ?? ''}`.trim() : '';
+    return `- ${s.date} vs ${s.match}${result}: ${(s.distance_m/1000).toFixed(1)}km, ${s.max_speed_kph}km/h top, ${s.sprints} sprints, ${s.high_intensity} HI runs${zoneLine}`;
+  }).join('\n');
+
+  const prompt = `You are writing a performance profile paragraph for a 16-year-old striker's football scouting page. Based on the GPS session data below, write 2-3 sentences identifying patterns in the player's performance — especially how their output correlates with match results or goals scored. Be specific, analytical, and written for a football scout. No generic phrases. No emoji. No bullet points.
+
+GPS Sessions:\n${rows}`;
+
+  try {
+    const res = await fetch('https://api.x.ai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${XAI_API_KEY}` },
+      body: JSON.stringify({ model: 'grok-3-mini', messages: [{ role: 'user', content: prompt }], max_tokens: 150, temperature: 0.6 }),
+    });
+    if (!res.ok) { console.warn(`⚠️ xAI summary error ${res.status}`); return null; }
+    const json = await res.json();
+    const summary = json.choices?.[0]?.message?.content?.trim() ?? null;
+    if (summary) console.log(`  ✨ Performance summary generated`);
+    return summary;
+  } catch (e) {
+    console.warn(`⚠️ xAI summary failed: ${e.message}`);
+    return null;
+  }
+}
+
 async function generateAllTaglines(sessions, existingTaglines, zoneByDate) {
   const taglines = { ...existingTaglines };
   const missing = sessions.filter(s => s.has_data && !taglines[s.session_id]);
@@ -192,8 +226,13 @@ function getExistingOverrides() {
 
 const EXPLICIT_FIELDS = new Set(['date', 'session_id', 'match', 'our_team', 'result', 'score', 'actual_mins', 'ai_tagline']);
 
-function toYAML(sessions, taglines) {
-  let yaml = 'sessions:\n';
+function toYAML(sessions, taglines, performanceSummary) {
+  let yaml = '';
+  if (performanceSummary) {
+    const escaped = performanceSummary.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+    yaml += `ai_performance_summary: "${escaped}"\n`;
+  }
+  yaml += 'sessions:\n';
   for (const s of sessions) {
     yaml += `  - date: "${s.date}"\n`;
     yaml += `    match: "${s.match}"\n`;
@@ -320,7 +359,10 @@ try {
 
   const taglines = await generateAllTaglines(sessions, existingTaglines, zoneByDate);
 
-  writeFileSync('src/content/gps/gps.yaml', toYAML(sessions, taglines));
+  console.log('✨ Generating cross-session performance summary...');
+  const performanceSummary = await generatePerformanceSummary(sessions, zoneByDate);
+
+  writeFileSync('src/content/gps/gps.yaml', toYAML(sessions, taglines, performanceSummary));
   console.log(`✅ Wrote ${sessions.filter(s => s.has_data).length}/${sessions.length} GPS sessions to gps.yaml`);
 
   console.log('🗺️ Fetching heatmap images...');

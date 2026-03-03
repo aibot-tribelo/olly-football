@@ -24,6 +24,7 @@ const attributesEntry = await getEntry('attributes', 'attributes');
 const attributes = attributesEntry.data.attributes;
 
 const gpsEntry = await getEntry('gps', 'gps');
+const gpsPerformanceSummary = gpsEntry.data.ai_performance_summary ?? null;
 const gpsSessions = gpsEntry.data.sessions.filter(s => s.has_data);
 const maxDist = Math.max(...gpsSessions.map(s => s.distance_m));
 const fullMatchSessions = gpsSessions.filter(s => s.distance_m > maxDist * 0.5);
@@ -257,6 +258,14 @@ const seasonsWithXG = seasons.map(season => ({
           <div class="text-xs text-cream-muted uppercase tracking-widest mt-1">Avg High Intensity</div>
         </div>
       </div>
+
+      <!-- AI Performance Summary -->
+      {gpsPerformanceSummary && (
+        <div class="mb-8 border-l-2 border-gold/50 pl-5">
+          <p class="text-xs font-['Oswald'] uppercase tracking-[0.2em] text-gold/70 mb-2">Performance Analysis</p>
+          <p class="text-sm text-cream-muted/80 leading-relaxed italic">{gpsPerformanceSummary}</p>
+        </div>
+      )}
 
       <!-- Per-match breakdown -->
       <div class="grid gap-4">

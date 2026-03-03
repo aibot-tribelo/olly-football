@@ -84,6 +84,7 @@ const attributesCollection = defineCollection({
 const gpsCollection = defineCollection({
   type: 'data',
   schema: z.object({
+    ai_performance_summary: z.string().optional(),
     sessions: z.array(
       z.object({
         date: z.string(),
