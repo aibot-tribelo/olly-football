@@ -31,8 +31,6 @@ jobs:
       - name: Fetch GPS data
         env:
           GPS_PROVIDER_TYPE: playerdata
-          GPS_PLAYER_INITIALS: OR
-          GPS_PLAYER_MATCH: "Bath City U18"
           GPS_PROVIDER_EMAIL: ${{ secrets.GPS_PROVIDER_EMAIL }}
           GPS_PROVIDER_PASSWORD: ${{ secrets.GPS_PROVIDER_PASSWORD }}
           XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
