@@ -15,7 +15,6 @@ const {
 // Read player config from profile.yaml
 const profileYaml = readFileSync('src/content/profile/profile.yaml', 'utf8');
 const GPS_PLAYER_INITIALS = profileYaml.match(/^initials:\s*["']?(.+?)["']?\s*$/m)?.[1] ?? '??';
-const GPS_PLAYER_MATCH = profileYaml.match(/^default_match:\s*["']?(.+?)["']?\s*$/m)?.[1] ?? 'Match';
 
 if (!GPS_PROVIDER_EMAIL || !GPS_PROVIDER_PASSWORD) {
   console.log('⚠️ GPS provider credentials not set, skipping GPS fetch');
@@ -306,7 +305,7 @@ try {
   ]);
 
   const { mins: existingMins, taglines: existingTaglines, matches: existingMatches } = getExistingOverrides();
-  const sessions = provider.normalizeSessions(rawSessions, existingMins, GPS_PLAYER_MATCH);
+  const sessions = provider.normalizeSessions(rawSessions, existingMins);
 
   // Preserve manually set match names from existing YAML
   for (const s of sessions) {

@@ -153,7 +153,7 @@ export async function fetchHeatmapImages(cookies, dir) {
 function round1(v) { return Math.round((v || 0) * 10) / 10; }
 function round0(v) { return Math.round(v || 0); }
 
-export function normalizeSessions(participations, existingMins, defaultMatch = 'Match') {
+export function normalizeSessions(participations, existingMins) {
   return participations.map(p => {
     const ms = p.metricSet;
     const hasData = !!(ms && ms.totalDistanceM > 0);
@@ -161,7 +161,7 @@ export function normalizeSessions(participations, existingMins, defaultMatch = '
     return {
       date: sess.startTime.slice(0, 10),
       session_id: sess.id,
-      match: sess.opponent || sess.ourTeam || defaultMatch,
+      match: sess.opponent || sess.ourTeam || 'Match',
       our_team: sess.ourTeam || null,
       result: sess.result || null,
       score: (sess.score != null && sess.opponentScore != null) ? `${sess.score}-${sess.opponentScore}` : null,
