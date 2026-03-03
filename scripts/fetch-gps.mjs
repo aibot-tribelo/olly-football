@@ -10,6 +10,7 @@ const {
   GPS_PROVIDER_EMAIL,
   GPS_PROVIDER_PASSWORD,
   XAI_API_KEY,
+  GPS_FORCE_TAGLINES = 'false',
 } = process.env;
 
 if (!GPS_PROVIDER_EMAIL || !GPS_PROVIDER_PASSWORD) {
@@ -118,11 +119,12 @@ async function generateTagline(s, zoneInfo) {
     day: 'numeric', month: 'long', year: 'numeric',
   });
   const zoneContext = zoneInfo ? `\nPitch movement:\n${formatZoneInfo(zoneInfo)}` : '';
+  const resultContext = s.result && s.score ? `Result: ${s.result.toUpperCase()} ${s.score}\n` : s.result ? `Result: ${s.result.toUpperCase()}\n` : '';
 
-  const prompt = `Write ONE punchy tagline (max 12 words) for a young player's GPS match report on a football profile website. Use the pitch movement data to make it specific — mention zones, channels, or positioning when they're interesting. Sound like a match report excerpt, not a data dump. No quotes. No emoji.
+  const prompt = `Write ONE punchy tagline (max 12 words) for a young player's GPS match report on a football profile website. Use the pitch movement data to make it specific — mention zones, channels, or positioning when they're interesting. If a result is provided, weave it in naturally. Sound like a match report excerpt, not a data dump. No quotes. No emoji.
 
 Match: ${s.match}, ${dateFormatted}
-Playing time: ~${playingMins} mins
+${resultContext}Playing time: ~${playingMins} mins
 Distance: ${(s.distance_m / 1000).toFixed(1)}km | Top speed: ${s.max_speed_kph} km/h | Avg speed: ${s.avg_speed_kph} km/h
 Sprints: ${s.sprints} (${s.sprint_distance_m}m) | High intensity: ${s.high_intensity} events | High speed runs: ${s.high_speed_run_events}
 Metres/min: ${s.metres_per_min} | Workload: ${s.workload}${zoneContext}
@@ -148,6 +150,40 @@ Examples of good taglines:
     return tagline;
   } catch (e) {
     console.warn(`⚠️ xAI failed for ${s.date}: ${e.message}`);
+    return null;
+  }
+}
+
+async function generatePerformanceSummary(sessions, zoneByDate) {
+  if (!XAI_API_KEY) return null;
+
+  const dataSessions = sessions.filter(s => s.has_data).slice(0, 10);
+  if (dataSessions.length < 2) return null;
+
+  const rows = dataSessions.map(s => {
+    const result = s.result ? ` [${s.result.toUpperCase()}${s.score ? ` ${s.score}` : ''}]` : '';
+    const zone = zoneByDate?.[s.date];
+    const zoneLine = zone ? ` | ${zone.sprintZone ?? ''} ${zone.channel ?? ''}`.trim() : '';
+    return `- ${s.date} vs ${s.match}${result}: ${(s.distance_m/1000).toFixed(1)}km, ${s.max_speed_kph}km/h top, ${s.sprints} sprints, ${s.high_intensity} HI runs${zoneLine}`;
+  }).join('\n');
+
+  const prompt = `You are writing a performance profile paragraph for a 16-year-old striker's football scouting page. Based on the GPS session data below, write 2-3 sentences identifying patterns in the player's performance — especially how their output correlates with match results or goals scored. Be specific, analytical, and written for a football scout. No generic phrases. No emoji. No bullet points.
+
+GPS Sessions:\n${rows}`;
+
+  try {
+    const res = await fetch('https://api.x.ai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${XAI_API_KEY}` },
+      body: JSON.stringify({ model: 'grok-3-mini', messages: [{ role: 'user', content: prompt }], max_tokens: 150, temperature: 0.6 }),
+    });
+    if (!res.ok) { console.warn(`⚠️ xAI summary error ${res.status}`); return null; }
+    const json = await res.json();
+    const summary = json.choices?.[0]?.message?.content?.trim() ?? null;
+    if (summary) console.log(`  ✨ Performance summary generated`);
+    return summary;
+  } catch (e) {
+    console.warn(`⚠️ xAI summary failed: ${e.message}`);
     return null;
   }
 }
@@ -192,8 +228,13 @@ function getExistingOverrides() {
 
 const EXPLICIT_FIELDS = new Set(['date', 'session_id', 'match', 'our_team', 'result', 'score', 'actual_mins', 'ai_tagline']);
 
-function toYAML(sessions, taglines) {
-  let yaml = 'sessions:\n';
+function toYAML(sessions, taglines, performanceSummary) {
+  let yaml = '';
+  if (performanceSummary) {
+    const escaped = performanceSummary.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+    yaml += `ai_performance_summary: "${escaped}"\n`;
+  }
+  yaml += 'sessions:\n';
   for (const s of sessions) {
     yaml += `  - date: "${s.date}"\n`;
     yaml += `    match: "${s.match}"\n`;
@@ -315,9 +356,15 @@ try {
   const zoneByDate = buildZoneSummaries(pathParticipations);
   console.log(`📊 Zone data for ${sessions.filter(s => s.has_data && zoneByDate[s.date]).length}/${sessions.filter(s => s.has_data).length} sessions`);
 
-  const taglines = await generateAllTaglines(sessions, existingTaglines, zoneByDate);
+  // Only generate taglines for sessions that don't already have one (unless force flag set)
+  const taglineCache = GPS_FORCE_TAGLINES === 'true' ? {} : existingTaglines;
+  if (GPS_FORCE_TAGLINES === 'true') console.log('⚡ Force regenerating all taglines');
+  const taglines = await generateAllTaglines(sessions, taglineCache, zoneByDate);
 
-  writeFileSync('src/content/gps/gps.yaml', toYAML(sessions, taglines));
+  console.log('✨ Generating cross-session performance summary...');
+  const performanceSummary = await generatePerformanceSummary(sessions, zoneByDate);
+
+  writeFileSync('src/content/gps/gps.yaml', toYAML(sessions, taglines, performanceSummary));
   console.log(`✅ Wrote ${sessions.filter(s => s.has_data).length}/${sessions.length} GPS sessions to gps.yaml`);
 
   console.log('🗺️ Fetching heatmap images...');
