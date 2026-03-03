@@ -21,9 +21,6 @@ jobs:
           node-version: 22
       - run: npm ci
 
-      # Restore cached gps.yaml so AI taglines persist between runs
-      # Key is unique per run so we always save fresh; restore-keys prefix
-      # matches the most recent previous run's cache.
       - name: Restore cached GPS data
         uses: actions/cache@v4
         with:
@@ -31,12 +28,13 @@ jobs:
           key: gps-data-${{ github.run_id }}
           restore-keys: gps-data-
 
-      - name: Fetch PlayerData GPS stats
+      - name: Fetch GPS data
         env:
-          PLAYERDATA_EMAIL: ${{ secrets.PLAYERDATA_EMAIL }}
-          PLAYERDATA_PASSWORD: ${{ secrets.PLAYERDATA_PASSWORD }}
+          GPS_PROVIDER_TYPE: playerdata
+          GPS_PROVIDER_EMAIL: ${{ secrets.GPS_PROVIDER_EMAIL }}
+          GPS_PROVIDER_PASSWORD: ${{ secrets.GPS_PROVIDER_PASSWORD }}
           XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
-        run: node scripts/fetch-playerdata.mjs
+        run: node scripts/fetch-gps.mjs
 
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3
