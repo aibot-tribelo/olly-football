@@ -36,7 +36,7 @@ jobs:
           GPS_PROVIDER_EMAIL: ${{ secrets.GPS_PROVIDER_EMAIL }}
           GPS_PROVIDER_PASSWORD: ${{ secrets.GPS_PROVIDER_PASSWORD }}
           XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
-        run: node scripts/fetch-playerdata.mjs
+        run: node scripts/fetch-gps.mjs
 
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3
