@@ -174,7 +174,7 @@ export function normalizeSessions(participations, existingMins) {
     return {
       date: sess.startTime.slice(0, 10),
       session_id: sess.id,
-      match: sess.opponent || sess.ourTeam || 'Match',
+      match: (sess.opponent?.trim() || sess.ourTeam?.trim()) || 'Match',
       our_team: sess.ourTeam || null,
       result: sess.result || null,
       score: (sess.score != null && sess.opponentScore != null) ? `${sess.score}-${sess.opponentScore}` : null,
