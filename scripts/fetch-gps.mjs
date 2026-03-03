@@ -118,11 +118,12 @@ async function generateTagline(s, zoneInfo) {
     day: 'numeric', month: 'long', year: 'numeric',
   });
   const zoneContext = zoneInfo ? `\nPitch movement:\n${formatZoneInfo(zoneInfo)}` : '';
+  const resultContext = s.result && s.score ? `Result: ${s.result.toUpperCase()} ${s.score}\n` : s.result ? `Result: ${s.result.toUpperCase()}\n` : '';
 
-  const prompt = `Write ONE punchy tagline (max 12 words) for a young player's GPS match report on a football profile website. Use the pitch movement data to make it specific — mention zones, channels, or positioning when they're interesting. Sound like a match report excerpt, not a data dump. No quotes. No emoji.
+  const prompt = `Write ONE punchy tagline (max 12 words) for a young player's GPS match report on a football profile website. Use the pitch movement data to make it specific — mention zones, channels, or positioning when they're interesting. If a result is provided, weave it in naturally. Sound like a match report excerpt, not a data dump. No quotes. No emoji.
 
 Match: ${s.match}, ${dateFormatted}
-Playing time: ~${playingMins} mins
+${resultContext}Playing time: ~${playingMins} mins
 Distance: ${(s.distance_m / 1000).toFixed(1)}km | Top speed: ${s.max_speed_kph} km/h | Avg speed: ${s.avg_speed_kph} km/h
 Sprints: ${s.sprints} (${s.sprint_distance_m}m) | High intensity: ${s.high_intensity} events | High speed runs: ${s.high_speed_run_events}
 Metres/min: ${s.metres_per_min} | Workload: ${s.workload}${zoneContext}
