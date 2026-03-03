@@ -10,6 +10,7 @@ const {
   GPS_PROVIDER_EMAIL,
   GPS_PROVIDER_PASSWORD,
   XAI_API_KEY,
+  GPS_FORCE_TAGLINES = 'false',
 } = process.env;
 
 if (!GPS_PROVIDER_EMAIL || !GPS_PROVIDER_PASSWORD) {
@@ -355,8 +356,10 @@ try {
   const zoneByDate = buildZoneSummaries(pathParticipations);
   console.log(`📊 Zone data for ${sessions.filter(s => s.has_data && zoneByDate[s.date]).length}/${sessions.filter(s => s.has_data).length} sessions`);
 
-  // Only generate taglines for sessions that don't already have one
-  const taglines = await generateAllTaglines(sessions, existingTaglines, zoneByDate);
+  // Only generate taglines for sessions that don't already have one (unless force flag set)
+  const taglineCache = GPS_FORCE_TAGLINES === 'true' ? {} : existingTaglines;
+  if (GPS_FORCE_TAGLINES === 'true') console.log('⚡ Force regenerating all taglines');
+  const taglines = await generateAllTaglines(sessions, taglineCache, zoneByDate);
 
   console.log('✨ Generating cross-session performance summary...');
   const performanceSummary = await generatePerformanceSummary(sessions, zoneByDate);

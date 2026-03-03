@@ -6,6 +6,11 @@ on:
   schedule:
     - cron: '0 6 * * 1,4'  # Monday + Thursday 6am UTC
   workflow_dispatch:
+    inputs:
+      force_taglines:
+        description: 'Force regenerate all GPS taglines'
+        default: 'false'
+        type: boolean
 
 permissions:
   contents: read
@@ -35,6 +40,7 @@ jobs:
           GPS_PROVIDER_EMAIL: ${{ secrets.GPS_PROVIDER_EMAIL }}
           GPS_PROVIDER_PASSWORD: ${{ secrets.GPS_PROVIDER_PASSWORD }}
           XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
+          GPS_FORCE_TAGLINES: ${{ github.event.inputs.force_taglines || 'false' }}
         run: node scripts/fetch-gps.mjs
 
       - run: npm run build
