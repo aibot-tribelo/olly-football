@@ -179,7 +179,7 @@ const seasonsWithXG = seasons.map(season => ({
           </div>
           <div class="bg-surface-elevated/80 backdrop-blur border border-pitch-line rounded-sm p-5 text-center">
             <div class="font-['Oswald'] text-4xl lg:text-5xl font-bold text-amber">{careerStats.gaPerGame}</div>
-            <div class="text-xs text-cream-muted uppercase tracking-widest mt-1">G/A per game</div>
+            <div class="text-xs text-cream-muted uppercase tracking-widest mt-1 cursor-help" title="Goals and assists combined per game played">G/A per game</div>
           </div>
         </div>
       </div>
@@ -358,11 +358,11 @@ const seasonsWithXG = seasons.map(season => ({
                       )}
                       <div class="text-center">
                         <div class="font-['Oswald'] text-2xl font-bold text-amber">{club.gp90.toFixed(2)}</div>
-                        <div class="text-xs text-cream-muted uppercase tracking-widest">G/90</div>
+                        <div class="text-xs text-cream-muted uppercase tracking-widest cursor-help" title="Goals scored per 90 minutes played">G/90</div>
                       </div>
                       <div class="text-center">
                         <div class="font-['Oswald'] text-2xl font-bold text-amber">{club.ap90.toFixed(2)}</div>
-                        <div class="text-xs text-cream-muted uppercase tracking-widest">A/90</div>
+                        <div class="text-xs text-cream-muted uppercase tracking-widest cursor-help" title="Assists per 90 minutes played">A/90</div>
                       </div>
                     </div>
                   </div>
