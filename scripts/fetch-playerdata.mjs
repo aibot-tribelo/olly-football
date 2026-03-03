@@ -3,9 +3,9 @@
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync, statSync } from 'fs';
 
-const { GPS_EMAIL, GPS_PASSWORD, XAI_API_KEY } = process.env;
+const { GPS_PROVIDER_EMAIL, GPS_PROVIDER_PASSWORD, XAI_API_KEY } = process.env;
 
-if (!GPS_EMAIL || !GPS_PASSWORD) {
+if (!GPS_PROVIDER_EMAIL || !GPS_PROVIDER_PASSWORD) {
   console.log('⚠️ PlayerData credentials not set, skipping GPS fetch');
   process.exit(0);
 }
@@ -24,8 +24,8 @@ async function login() {
 
   const body = new URLSearchParams({
     'authenticity_token': csrf,
-    'identity[email]': GPS_EMAIL,
-    'identity[password]': GPS_PASSWORD,
+    'identity[email]': GPS_PROVIDER_EMAIL,
+    'identity[password]': GPS_PROVIDER_PASSWORD,
   });
 
   const loginRes = await fetch(`${BASE}/api/auth/identities/sign_in`, {
