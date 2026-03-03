@@ -285,7 +285,7 @@ const seasonsWithXG = seasons.map(season => ({
               <div class="text-center">
                 <div class="font-['Oswald'] text-xl font-bold text-amber">{s.high_intensity}<span class="text-sm text-cream-muted"> HI</span></div>
               </div>
-              <svg aria-hidden="true" class="w-5 h-5 text-cream-muted/40 group-hover:text-gold group-hover:translate-x-1 transition-all shrink-0 hidden sm:block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+              <svg aria-hidden="true" class="w-5 h-5 text-gold/60 group-hover:text-gold group-hover:translate-x-1 transition-all shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
             </div>
           </a>
         ))}
@@ -293,8 +293,9 @@ const seasonsWithXG = seasons.map(season => ({
 
       <!-- Link to full GPS page -->
       <div class="mt-8 text-center">
-        <a href={`${BASE}gps/`} class="inline-flex items-center gap-2 font-['Oswald'] text-sm uppercase tracking-[0.2em] text-gold hover:text-cream border border-gold/30 hover:border-gold px-6 py-3 rounded-sm transition-colors">
-          View Full GPS Data →
+        <a href={`${BASE}gps/`} aria-label="View full GPS performance data" class="inline-flex items-center gap-2 font-['Oswald'] text-sm uppercase tracking-[0.2em] text-gold hover:text-cream border border-gold/30 hover:border-gold px-6 py-3 rounded-sm transition-colors">
+          View Full GPS Data
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </a>
       </div>
     </div>
