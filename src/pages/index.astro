@@ -63,6 +63,15 @@ careerStats.gaPerGame = parseFloat(
   ((careerStats.goals + careerStats.assists) / careerStats.apps).toFixed(2)
 );
 
+// Season range label — dynamically derived from loaded seasons
+const seasonLabels = seasons.map(s => s.season); // already sorted newest first
+const oldestSeason = seasonLabels[seasonLabels.length - 1];
+const newestSeason = seasonLabels[0];
+const seasonRangeLabel = seasonLabels.length === 1
+  ? newestSeason
+  : `${oldestSeason} – ${newestSeason}`;
+const seasonCountLabel = `${seasonLabels.length} season${seasonLabels.length !== 1 ? 's' : ''}`;
+
 // Club logo mapping
 const clubLogos: Record<string, string> = {
   'Bath City U18': `${BASE}clubs/bath-city.png`,
@@ -184,6 +193,10 @@ const seasonsWithXG = seasons.map(season => ({
             <div class="text-xs text-cream-muted uppercase tracking-widest mt-1 cursor-help" title="Goals and assists combined per game played">G/A per game</div>
           </div>
         </div>
+        <!-- Season range label -->
+        <p class="text-xs text-cream-muted/60 uppercase tracking-widest mt-3 text-center">
+          {seasonCountLabel} &middot; {seasonRangeLabel}
+        </p>
       </div>
 
       <div class="mt-12 flex items-center gap-4 text-cream-muted">
