@@ -15,7 +15,10 @@ const seasons = seasonsEntries
   .sort((a, b) => b.season.localeCompare(a.season)); // Newest first
 
 const matchesEntry = await getEntry('matches', 'matches');
-const keyMatches = matchesEntry.data.matches.filter(m => m.goals >= 2 || (m.goals >= 1 && m.assists >= 1));
+const keyMatches = matchesEntry.data.matches
+  .filter(m => m.goals >= 2 || (m.goals >= 1 && m.assists >= 1))
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  .slice(0, 4);
 
 const honoursEntry = await getEntry('honours', 'honours');
 const honours = honoursEntry.data.honours;
