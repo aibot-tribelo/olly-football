@@ -72,7 +72,7 @@ function matchSeason(dateStr: string): string {
   return `${start}–${String(start + 1).slice(-2)}`;
 }
 
-// Derive season range from matches (newest 2 seasons)
+// Derive season range from matches (only the 2 most recent seasons for headline stats)
 const allMatchSeasons = [...new Set(allMatches.map(m => matchSeason(m.date)))].sort();
 const recentMatchSeasons = allMatchSeasons.slice(-HEADLINE_SEASONS);
 const oldestSeason = recentMatchSeasons[0];
