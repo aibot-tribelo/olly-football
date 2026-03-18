@@ -63,7 +63,6 @@ const headlineClubs = headlineSeasons.flatMap(s => s.clubs);
 
 // Goals, assists, apps & mins: all derived from matches.yaml (single source of truth)
 const allMatches = matchesEntry.data.matches;
-const recentSeasonLabels = new Set(headlineSeasons.map(s => s.season));
 
 function matchSeason(dateStr: string): string {
   const d = new Date(dateStr);
@@ -72,6 +71,16 @@ function matchSeason(dateStr: string): string {
   const start = m >= 8 ? y : y - 1;
   return `${start}–${String(start + 1).slice(-2)}`;
 }
+
+// Derive season range from matches (newest 2 seasons)
+const allMatchSeasons = [...new Set(allMatches.map(m => matchSeason(m.date)))].sort();
+const recentMatchSeasons = allMatchSeasons.slice(-HEADLINE_SEASONS);
+const oldestSeason = recentMatchSeasons[0];
+const newestSeason = recentMatchSeasons[recentMatchSeasons.length - 1];
+const seasonRangeLabel = recentMatchSeasons.length === 1
+  ? newestSeason
+  : `${oldestSeason} – ${newestSeason}`;
+const seasonCountLabel = `${recentMatchSeasons.length} season${recentMatchSeasons.length !== 1 ? 's' : ''}`;
 
 const headlineMatches = allMatches.filter(m => recentMatchSeasons.includes(matchSeason(m.date)));
 
@@ -85,16 +94,6 @@ const careerStats = {
 careerStats.gaPerGame = parseFloat(
   ((careerStats.goals + careerStats.assists) / careerStats.apps).toFixed(2)
 );
-
-// Season range label — derived from matches
-const allMatchSeasons = [...new Set(allMatches.map(m => matchSeason(m.date)))].sort();
-const recentMatchSeasons = allMatchSeasons.slice(-HEADLINE_SEASONS);
-const oldestSeason = recentMatchSeasons[0];
-const newestSeason = recentMatchSeasons[recentMatchSeasons.length - 1];
-const seasonRangeLabel = recentMatchSeasons.length === 1
-  ? newestSeason
-  : `${oldestSeason} – ${newestSeason}`;
-const seasonCountLabel = `${recentMatchSeasons.length} season${recentMatchSeasons.length !== 1 ? 's' : ''}`;
 
 // Club logo mapping
 const clubLogos: Record<string, string> = {
