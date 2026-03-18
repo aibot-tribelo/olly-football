@@ -432,7 +432,9 @@ const seasonsWithXG: SeasonStats[] = Object.entries(matchesBySeason)
                         <img src={clubLogos[club.name]} alt={`${club.name} badge`} class="w-10 h-10 object-contain" width="40" height="40" loading="lazy" />
                       )}
                       <div>
-                        <h4 class="font-['Oswald'] text-lg uppercase tracking-wide">{club.name}</h4>
+                        <a href={`${BASE}matches/#${(club.name + '-' + s.season).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '')}`} class="hover:text-gold transition-colors">
+                          <h4 class="font-['Oswald'] text-lg uppercase tracking-wide">{club.name}</h4>
+                        </a>
                         <p class="text-xs text-cream-muted">{club.league}</p>
                       </div>
                     </div>
