@@ -458,6 +458,15 @@ matches:
     goals: 2
     assists: 2
     mins: 60
+  - date: "2024-10-06"
+    team: "Calne Town U16"
+    opponent: "Wanbourough"
+    venue: "Home"
+    result: "W"
+    score: "14-0"
+    goals: 4
+    assists: 2
+    mins: 80
   - date: "2024-10-05"
     team: "FC Wilts U16"
     opponent: "Bristol Inner City"
@@ -467,6 +476,15 @@ matches:
     goals: 1
     assists: 0
     mins: 70
+  - date: "2024-09-29"
+    team: "Calne Town U16"
+    opponent: "Swindon Supermarine"
+    venue: "Away"
+    result: "W"
+    score: "6-1"
+    goals: 1
+    assists: 2
+    mins: 60
   - date: "2024-09-28"
     team: "FC Wilts U16"
     opponent: "Cirencester"
@@ -485,6 +503,15 @@ matches:
     goals: 0
     assists: 1
     mins: 80
+  - date: "2024-09-22"
+    team: "FC Wilts U16"
+    opponent: "Mid Somerset"
+    venue: null
+    result: "L"
+    score: "3-0"
+    goals: 0
+    assists: 0
+    mins: 60
   - date: "2024-09-15"
     team: "Calne Town U16"
     opponent: "Purton"
