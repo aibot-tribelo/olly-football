@@ -1,4 +1,13 @@
 matches:
+  - date: "2026-03-18"
+    team: "Bath City U18"
+    opponent: "Bridgwater College"
+    venue: "Away"
+    result: "W"
+    score: "5-0"
+    goals: 1
+    assists: 0
+    mins: 75
   - date: "2026-03-11"
     team: "Bath City U18"
     opponent: "Richard Huish College"
