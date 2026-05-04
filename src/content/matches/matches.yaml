@@ -396,12 +396,12 @@ matches:
     opponent: Chippenham
     team: Calne Town Youth U16
   - goals: 0
-    mins: null
+    mins: 60
     assists: 0
     date: 2025-01-18
-    venue: null
-    score: null
-    result: W
+    venue: Home
+    score: 1-2
+    result: L
     opponent: Cirencester
     team: Bath City U18
   - goals: 1
@@ -441,12 +441,12 @@ matches:
     opponent: Purton
     team: Calne Town Youth U16
   - goals: 0
-    mins: null
+    mins: 45
     assists: 0
     date: 2024-12-14
-    venue: null
-    score: null
-    result: W
+    venue: Home
+    score: 1-1
+    result: D
     opponent: Swindon Supermarine
     team: Bath City U18
   - goals: 2
