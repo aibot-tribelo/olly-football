@@ -1,5 +1,14 @@
 matches:
   - goals: 0
+    mins: 45
+    assists: 2
+    date: 2026-09-05
+    venue: Home
+    score: 7-0
+    result: W
+    opponent: Champion Sports U18 DTC FC
+    team: Bath City U18
+  - goals: 0
     mins: 75
     assists: 0
     date: 2026-05-04
